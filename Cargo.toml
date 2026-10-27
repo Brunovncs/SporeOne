@@ -1,0 +1,35 @@
+[workspace]
+resolver = "3"
+members = ["crates/sporeone-core", "crates/sporeone", "crates/sporeone-catalog"]
+default-members = ["crates/sporeone"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+license = "MIT"
+repository = "https://github.com/Brunovncs/SporeOne"
+
+[workspace.dependencies]
+sporeone-core = { path = "crates/sporeone-core" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+windows-sys = "0.61"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
+
+# `cargo build --profile local`: a release build for machines without the Windows SDK. GPUI's
+# Windows backend precompiles its shaders with fxc.exe in release builds; with debug assertions
+# on for that one crate (and its build script) it compiles them at startup instead.
+[profile.local]
+inherits = "release"
+
+[profile.local.package.gpui-pre-windows]
+debug-assertions = true
+
+[profile.local.build-override]
+debug-assertions = true

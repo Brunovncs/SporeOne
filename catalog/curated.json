@@ -1,0 +1,73 @@
+[
+  {
+    "id": "WoodyWizard/SporeCoop",
+    "name": "SporeCoop",
+    "description": "Co-op for two to four players in one world, through every stage from Cell to Space. The host runs the world and every player needs the game and the same SporeCoop version.",
+    "kind": "setup",
+    "setup": "SporeCoopSetup.exe",
+    "marker": "SporebinEP1/sporekit.dll",
+    "category": "multiplayer",
+    "status": "experimental",
+    "needs": { "stores": ["Steam", "Gog"], "galactic_adventures": true, "launcher_kit": false },
+    "notes": [
+      {
+        "en": "Installed by its own setup, outside the Launcher Kit: it replaces steam_api.dll with a loader and keeps the original next to it.",
+        "pt": "Instalado pelo próprio instalador, fora do Launcher Kit: troca o steam_api.dll por um carregador e guarda o original ao lado."
+      },
+      {
+        "en": "Steam and GOG copies only. Over the internet it needs a private network such as Tailscale, or a forwarded port.",
+        "pt": "Só cópias da Steam e da GOG. Pela internet precisa de uma rede privada como o Tailscale, ou de uma porta liberada."
+      },
+      {
+        "en": "Not tested together with Launcher Kit mods yet.",
+        "pt": "Ainda não foi testado junto com mods do Launcher Kit."
+      }
+    ]
+  },
+  {
+    "id": "dark-injection",
+    "name": "Dark Injection",
+    "author": "rob55rod",
+    "description": "A large overhaul that brings much of Darkspore into Spore: new parts, abilities and space stage content.",
+    "kind": "page",
+    "page": "https://davoonline.com/sporemodder/rob55rod/DarkInjection/",
+    "category": "gameplay",
+    "status": "old",
+    "notes": [
+      {
+        "en": "The last public version is from 2019 and its author stopped modding. It still installs through the Launcher Kit, but recent mods may clash with it.",
+        "pt": "A última versão pública é de 2019 e o autor parou de fazer mods. Ainda instala pelo Launcher Kit, mas mods recentes podem conflitar com ele."
+      }
+    ]
+  },
+  {
+    "id": "betterspore",
+    "name": "BetterSpore",
+    "description": "Rebalances and extends the space stage. For years the most downloaded Spore mod on Nexus Mods.",
+    "kind": "page",
+    "page": "https://www.nexusmods.com/spore/mods/3",
+    "category": "gameplay",
+    "status": "old",
+    "notes": [
+      {
+        "en": "Downloaded from Nexus Mods, which needs an account. Drop the file on SporeOne's window to install it.",
+        "pt": "Baixado do Nexus Mods, que exige uma conta. Solte o arquivo na janela do SporeOne para instalar."
+      }
+    ]
+  },
+  {
+    "id": "project-rehatched-reborn",
+    "name": "Project Rehatched Reborn",
+    "description": "Fixes many graphical bugs and replaces textures with higher resolution ones.",
+    "kind": "page",
+    "page": "https://www.nexusmods.com/spore/mods/26",
+    "category": "visuals",
+    "status": "old",
+    "notes": [
+      {
+        "en": "Downloaded from Nexus Mods, which needs an account. Drop the file on SporeOne's window to install it.",
+        "pt": "Baixado do Nexus Mods, que exige uma conta. Solte o arquivo na janela do SporeOne para instalar."
+      }
+    ]
+  }
+]

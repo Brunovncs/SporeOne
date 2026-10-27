@@ -1,0 +1,4 @@
+# The C runtime linked in on Windows, so SporeOne starts on a machine without the Visual C++
+# Redistributable (VCRUNTIME140.dll).
+[target.'cfg(all(windows, target_env = "msvc"))']
+rustflags = ["-C", "target-feature=+crt-static"]

@@ -1,0 +1,52 @@
+name: Catalog
+
+# Builds catalog.json from the repositories tagged spore-mod and catalog/curated.json, and
+# publishes it on the catalog branch, where SporeOne downloads it from. Only a change in the mods
+# makes a commit: the build time alone does not.
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [catalog/curated.json, crates/sporeone-core/src/**, crates/sporeone-catalog/**]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: catalog
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - name: Build the catalog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cargo run -q -p sporeone-catalog --locked -- catalog/curated.json "$RUNNER_TEMP/catalog.json"
+      - name: Publish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch -q origin catalog; then
+            git worktree add -q pub FETCH_HEAD
+            git -C pub switch -q -c catalog
+          else
+            git worktree add -q --orphan -b catalog pub
+          fi
+          if [ -f pub/catalog.json ] && cmp -s <(jq -S .mods "$RUNNER_TEMP/catalog.json") <(jq -S .mods pub/catalog.json); then
+            echo "No change in the mods"
+            exit 0
+          fi
+          cp "$RUNNER_TEMP/catalog.json" pub/catalog.json
+          git -C pub add catalog.json
+          git -C pub commit -q -m "Catalog $(date -u +%F)"
+          git -C pub push -q origin catalog
