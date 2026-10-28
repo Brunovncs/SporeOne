@@ -16,6 +16,7 @@ pub mod modinfo;
 pub mod net;
 pub mod readme;
 pub mod state;
+pub mod tweaks;
 pub mod update;
 pub mod version;
 pub mod win;

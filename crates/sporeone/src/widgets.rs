@@ -271,6 +271,23 @@ pub fn filters<T: Copy + PartialEq + 'static, V: 'static>(
     d
 }
 
+/// An on and off switch, for a setting that applies at once.
+pub fn switch(id: impl Into<ElementId>, on: bool, t: &Theme) -> Stateful<Div> {
+    div()
+        .id(id.into())
+        .flex()
+        .flex_none()
+        .items_center()
+        .w(px(40.))
+        .h(px(24.))
+        .p(px(3.))
+        .rounded_full()
+        .cursor_pointer()
+        .when(on, |d| d.bg(t.primary).justify_end())
+        .when(!on, |d| d.bg(t.control).border_1().border_color(t.stroke_strong))
+        .child(div().size(px(18.)).rounded_full().bg(if on { t.on_primary } else { t.text3 }))
+}
+
 /// A check box with its label, for a mod's options.
 pub fn check_box(on: bool, label: impl Into<SharedString>, t: &Theme) -> Div {
     let mark = div()

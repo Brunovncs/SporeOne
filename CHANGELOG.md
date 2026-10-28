@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.6
+
+A new logo. A Game tweaks screen, with a switch to skip the opening cutscene: SporeOne adds the
+line the game reads, keeps a copy of each file as it was, and takes it out again when switched off.
+Play now minimizes SporeOne instead of leaving it in front, and the Installed screen says when mods
+carry code that only loads through Play. The catalog scrolls smoothly: only the rows on screen are
+drawn, which made it several times faster.
+
 ## 0.0.5
 
 A mod's page shows its full description, the README of its repository, formatted. SporeOne now

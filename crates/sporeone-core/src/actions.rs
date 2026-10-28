@@ -100,7 +100,9 @@ pub fn apply_file(file: &Path) -> i32 {
         let bytes = std::fs::read(file).map_err(|e| e.to_string())?;
         let job: Elevated = serde_json::from_slice(&bytes).map_err(|e| e.to_string())?;
         let lk = &job.roots.lk;
-        if !lk.join(crate::launcher_kit::LAUNCHER_EXE).is_file() {
+        // A tweak of the game's settings has the game's data folder in the Launcher Kit's place.
+        let data = job.roots.ga_data.iter().chain(job.roots.spore_data.iter()).any(|d| d == lk);
+        if !data && !lk.join(crate::launcher_kit::LAUNCHER_EXE).is_file() {
             return Err(format!("{} is not the Launcher Kit's folder", lk.display()));
         }
         for d in job.roots.ga_data.iter().chain(job.roots.spore_data.iter()) {
@@ -176,6 +178,12 @@ pub fn uninstall(name: &str, env: &Env) -> Result<(), Failure> {
     st.origins.remove(name);
     let _ = st.save();
     Ok(())
+}
+
+/// Turns a tweak of the game's settings on or off.
+pub fn set_tweak(t: &crate::tweaks::Tweak, game: &crate::game::Game, on: bool) -> Result<(), Failure> {
+    let (plan, roots) = crate::tweaks::plan(t, game, on, &state::data_dir().join("originals")).map_err(Failure::Other)?;
+    carry_out(&plan, &roots)
 }
 
 /// Downloads a mod's own installer and starts it.

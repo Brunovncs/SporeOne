@@ -189,6 +189,23 @@ impl MainView {
                     }),
             )
             .children(banner)
+            .when(self.has_code() && self.setup_problem().is_none(), |d| {
+                d.child(
+                    crate::widgets::card(&t)
+                        .flex()
+                        .items_center()
+                        .gap(px(12.))
+                        .px(px(20.))
+                        .py(px(12.))
+                        .mb(px(24.))
+                        .child(icon(glyph::INFO, 16., t.text2))
+                        .child(body(text.needs_play, t.text2).flex_1().min_w(px(0.)))
+                        .child(
+                            icon_label_button("installed-play", glyph::PLAY, text.play, Button::Primary, &t)
+                                .on_click(cx.listener(|this, _, window, cx| this.play(window, cx))),
+                        ),
+                )
+            })
             .when(total == 0, |d| d.child(empty))
             .when(total > 0, |d| d.child(list))
             .child(caption(text.drop_hint, t.text3).pt(px(24.)))

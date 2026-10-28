@@ -5102,7 +5102,7 @@ dependencies = [
 
 [[package]]
 name = "sporeone"
-version = "0.0.5"
+version = "0.0.6"
 dependencies = [
  "embed-resource",
  "gpui-pre",
@@ -5116,7 +5116,7 @@ dependencies = [
 
 [[package]]
 name = "sporeone-catalog"
-version = "0.0.5"
+version = "0.0.6"
 dependencies = [
  "serde_json",
  "sporeone-core",
@@ -5124,7 +5124,7 @@ dependencies = [
 
 [[package]]
 name = "sporeone-core"
-version = "0.0.5"
+version = "0.0.6"
 dependencies = [
  "roxmltree 0.21.2",
  "serde",

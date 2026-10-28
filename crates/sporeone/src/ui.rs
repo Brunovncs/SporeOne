@@ -40,6 +40,7 @@ pub enum Screen {
     /// A mod's page, by catalog id.
     Mod(String),
     Installed,
+    Tweaks,
     Settings,
 }
 
@@ -118,6 +119,10 @@ pub struct MainView {
     custom: Vec<Entry>,
     pub custom_ids: HashSet<String>,
     pub view: View,
+    /// The page's scrolling, and where the catalog's list starts in it, so only the rows on
+    /// screen are drawn.
+    pub scroll: gpui::ScrollHandle,
+    pub list_y: std::rc::Rc<std::cell::Cell<f32>>,
     pub adding: Option<Adding>,
     pub app_update: Option<AppUpdate>,
     pub env: Arc<Env>,
@@ -199,6 +204,8 @@ impl MainView {
             custom: saved.custom,
             custom_ids,
             view: if saved.grid { View::Grid } else { View::List },
+            scroll: gpui::ScrollHandle::new(),
+            list_y: std::rc::Rc::new(std::cell::Cell::new(0.)),
             adding: None,
             app_update: None,
             env: Arc::new(read_env(demo)),
@@ -223,6 +230,7 @@ impl MainView {
         if demo && let Ok(page) = std::env::var("SPOREONE_PAGE") {
             match page.as_str() {
                 "installed" => view.screen = Screen::Installed,
+                "tweaks" => view.screen = Screen::Tweaks,
                 "settings" => view.screen = Screen::Settings,
                 "grid" => view.view = View::Grid,
                 "add" => view.open_adding(window, cx),
@@ -269,6 +277,7 @@ impl MainView {
     pub fn go(&mut self, screen: Screen, cx: &mut Context<Self>) {
         self.screen = screen;
         self.confirm = None;
+        self.scroll.set_offset(gpui::point(px(0.), px(0.)));
         cx.notify();
     }
 
@@ -490,6 +499,13 @@ impl MainView {
         .detach();
     }
 
+    /// Turns a tweak of the game's settings on or off.
+    pub fn set_tweak(&mut self, id: &'static str, name: &'static str, on: bool, cx: &mut Context<Self>) {
+        let (Some(t), Some(g)) = (sporeone_core::tweaks::by_id(id), self.env.game().cloned()) else { return };
+        let done = fill(if on { self.text.tweak_on } else { self.text.tweak_off }, name);
+        self.run(format!("tweak:{id}"), Work::Setup, done, move || actions::set_tweak(t, &g, on), cx);
+    }
+
     /// Takes a mod added from a link off the list. What is installed stays.
     pub fn remove_custom(&mut self, id: &str, cx: &mut Context<Self>) {
         let mut st = State::load();
@@ -606,16 +622,26 @@ impl MainView {
         let _ = done;
     }
 
-    pub fn play(&mut self, cx: &mut Context<Self>) {
+    /// Starts the game through the Launcher Kit and steps aside, minimized, until it is wanted
+    /// again.
+    pub fn play(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         #[cfg(windows)]
-        if let Some(lk) = self.env.lk.clone()
-            && let Err(e) = lk.launch()
-        {
-            self.notice = Some(Notice { ok: false, text: fill(self.text.failed, e) });
-            cx.notify();
+        if let Some(lk) = self.env.lk.clone() {
+            match lk.launch() {
+                Ok(()) => window.minimize_window(),
+                Err(e) => {
+                    self.notice = Some(Notice { ok: false, text: fill(self.text.failed, e) });
+                    cx.notify();
+                }
+            }
         }
         #[cfg(not(windows))]
-        let _ = cx;
+        let _ = (window, cx);
+    }
+
+    /// Whether an installed mod carries code, which only the Launcher Kit's launcher loads.
+    pub fn has_code(&self) -> bool {
+        self.env.installed.mods.iter().any(|m| m.files.iter().any(|f| f.name.to_ascii_lowercase().ends_with(".dll")))
     }
 
     /// What stops mods from being installed at all, in a sentence for the banner.
@@ -678,7 +704,13 @@ impl MainView {
             .on_click(cx.listener(|this, _, _, cx| this.go(Screen::Catalog, cx)))
             .when(framed, |d| d.on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation()))
             .child(mark)
-            .child(title("SporeOne", t.text));
+            .child(
+                div()
+                    .flex()
+                    .flex_col()
+                    .child(title("SporeOne", t.text).line_height(px(18.)))
+                    .child(div().text_size(px(10.)).line_height(px(12.)).text_color(t.text3).child(text.mod_manager)),
+            );
         let count = self.env.installed.mods.len() + self.external().len();
         let installed = if count == 0 { text.installed.to_string() } else { format!("{} {count}", text.installed) };
         let updates = !self.updates().is_empty();
@@ -695,15 +727,16 @@ impl MainView {
                     .relative()
                     .child(self.nav("nav-installed", installed, Screen::Installed, cx))
                     .when(updates, |d| d.child(div().absolute().top(px(4.)).right(px(6.)).size(px(7.)).rounded_full().bg(t.accent))),
-            );
+            )
+            .child(self.nav("nav-tweaks", text.tweaks.to_string(), Screen::Tweaks, cx));
         let can_play = self.env.lk.is_some() && self.env.game().is_some_and(|g| g.has_ga());
         let play = crate::widgets::with_tip(
             icon_label_button("play", glyph::PLAY, text.play, if can_play { Kind::Primary } else { Kind::Standard }, &t)
                 .when(!can_play, |d| d.opacity(0.5).cursor_default())
                 .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
-                .on_click(cx.listener(move |this, _, _, cx| {
+                .on_click(cx.listener(move |this, _, window, cx| {
                     if can_play {
-                        this.play(cx)
+                        this.play(window, cx)
                     }
                 })),
             text.play_hint,
@@ -999,13 +1032,18 @@ pub fn size_text(bytes: u64) -> String {
     }
 }
 
-/// The small icon for the window's `scale`. GPUI rasterizes an SVG image at twice its own size
-/// whatever the scale, and this one is 16 by 16, blurry above 100%: given a size, it comes out
-/// with one pixel for each of the screen's.
+/// The small icon for the window's `scale`: the one made for the nearest size at or above what the
+/// screen needs (`scripts/make_icon.py`), so it is never stretched up.
 fn brand(scale: f32) -> (f32, Arc<Image>) {
-    let side = BRAND * scale / 2.;
-    let svg = include_str!("../../../assets/icon-small.svg").replacen("<svg ", &format!("<svg width=\"{side}\" height=\"{side}\" "), 1);
-    (scale, Arc::new(Image::from_bytes(ImageFormat::Svg, svg.into_bytes())))
+    const SIZES: [(f32, &[u8]); 4] = [
+        (28., include_bytes!("../../../assets/brand/brand-28.png")),
+        (35., include_bytes!("../../../assets/brand/brand-35.png")),
+        (42., include_bytes!("../../../assets/brand/brand-42.png")),
+        (56., include_bytes!("../../../assets/brand/brand-56.png")),
+    ];
+    let want = BRAND * scale - 0.5;
+    let bytes = SIZES.iter().find(|(side, _)| *side >= want).unwrap_or(&SIZES[3]).1;
+    (scale, Arc::new(Image::from_bytes(ImageFormat::Png, bytes.to_vec())))
 }
 
 /// How big the icon is in the bar on top.
@@ -1017,7 +1055,7 @@ impl Render for MainView {
         if self.brand.0 != window.scale_factor() {
             self.brand = brand(window.scale_factor());
         }
-        let max_w = if self.screen == Screen::Settings { layout::SETTINGS_W } else { layout::MAX_W };
+        let max_w = if matches!(self.screen, Screen::Settings | Screen::Tweaks) { layout::SETTINGS_W } else { layout::MAX_W };
         let content: AnyElement = match self.screen.clone() {
             Screen::Catalog => self.render_home(window, cx),
             Screen::Mod(id) => match self.entry(&id).cloned() {
@@ -1025,6 +1063,7 @@ impl Render for MainView {
                 None => self.render_home(window, cx),
             },
             Screen::Installed => self.render_library(window, cx),
+            Screen::Tweaks => self.render_tweaks(window, cx),
             Screen::Settings => self.render_settings(window, cx),
         };
         let page = div()
@@ -1044,7 +1083,7 @@ impl Render for MainView {
             .children(self.update_bar(cx))
             .children(self.notice_bar(cx))
             .child(
-                div().id("scroll").flex_1().min_h(px(0.)).overflow_y_scroll().child(
+                div().id("scroll").flex_1().min_h(px(0.)).overflow_y_scroll().track_scroll(&self.scroll).child(
                     div()
                         .flex()
                         .justify_center()

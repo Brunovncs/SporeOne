@@ -18,6 +18,12 @@ use sporeone_core::i18n::{Text, fill};
 const TILE_MIN_W: f32 = 256.;
 const TILE_H: f32 = 200.;
 const GAP: f32 = 16.;
+/// A row of the list, and how far apart rows start: each draws the line above it over the last
+/// pixel of the one before.
+const ROW_H: f32 = 72.;
+const ROW_STEP: f32 = ROW_H - 1.;
+/// Rows drawn beyond the screen's edges, so scrolling never shows a gap before the next frame.
+const SPARE: usize = 4;
 
 /// A word on where a mod stands, if there is one to say: installed, an update, or why it is
 /// different from the rest.
@@ -77,14 +83,18 @@ impl MainView {
         let text = self.text;
         let id = e.id.clone();
         let faded = matches!(e.status, Status::Old | Status::Broken);
-        let byline =
-            if e.description.is_empty() { fill(text.by, &e.author) } else { format!("{} · {}", fill(text.by, &e.author), e.description) };
+        let byline = [if e.author.is_empty() { String::new() } else { fill(text.by, &e.author) }, one_line(&e.description)]
+            .into_iter()
+            .filter(|s| !s.is_empty())
+            .collect::<Vec<_>>()
+            .join(" · ");
         let downloads = if e.downloads() > 0 { short_count(e.downloads()) } else { String::new() };
         let hover = t.layer_hover;
         crate::widgets::row(&t)
             .id(("mod-row", i))
             .gap(px(20.))
-            .py(px(14.))
+            .h(px(ROW_H))
+            .py(px(0.))
             .cursor_pointer()
             .hover(move |s| s.bg(hover))
             .on_click(cx.listener(move |this, _, _, cx| this.go(Screen::Mod(id.clone()), cx)))
@@ -169,7 +179,7 @@ impl MainView {
             )
             .child(title(e.name.clone(), if faded { t.text2 } else { t.text }).truncate())
             .child(caption(fill(text.by, &e.author), t.text3).truncate())
-            .child(caption(e.description.clone(), t.text2).line_clamp(2).pt(px(4.)))
+            .child(caption(one_line(&e.description), t.text2).line_clamp(2).pt(px(4.)))
             .child(div().flex_1())
             .child(
                 div()
@@ -181,6 +191,16 @@ impl MainView {
                     .child(caption(e.version_text().unwrap_or_default(), t.text3).truncate()),
             )
             .into_any_element()
+    }
+
+    /// Which of `count` lines, `step` apart from the list's top, are on screen or near it.
+    fn visible(&self, count: usize, step: f32, window: &Window) -> (usize, usize) {
+        let view = self.scroll.bounds().size.height;
+        let height = if view > px(0.) { f32::from(view) } else { f32::from(window.viewport_size().height) };
+        let top = -f32::from(self.scroll.offset().y) - self.list_y.get();
+        let first = ((top / step).floor().max(0.) as usize).saturating_sub(SPARE).min(count);
+        let last = ((((top + height) / step).ceil().max(0.)) as usize + SPARE).min(count);
+        (first, last.max(first))
     }
 
     /// The mods the words and the category pick, in the order chosen.
@@ -263,21 +283,49 @@ impl MainView {
         let mods = if entries.is_empty() {
             self.empty(cx)
         } else if self.view == View::List {
-            let mut list = crate::widgets::group(&t);
-            for (i, e) in entries.iter().enumerate() {
+            // Only the rows on screen are laid out and drawn; the others are room of their height.
+            let (first, last) = self.visible(entries.len(), ROW_STEP, window);
+            let mut list = crate::widgets::group(&t).child(div().h(px(first as f32 * ROW_STEP)));
+            for (i, e) in entries.iter().enumerate().take(last).skip(first) {
                 list = list.child(self.list_row(i, e, cx));
             }
-            list.into_any_element()
+            list.child(div().h(px((entries.len() - last) as f32 * ROW_STEP))).into_any_element()
         } else {
             // As many columns as fit, the tiles stretched to fill the row.
             let width = (crate::frame::inner_width(window) - 2. * layout::GUTTER).min(layout::MAX_W - 2. * layout::GUTTER);
-            let cols = ((width + GAP) / (TILE_MIN_W + GAP)).floor().max(1.);
-            let tile_w = ((width - GAP * (cols - 1.)) / cols).floor();
-            let mut grid = div().flex().flex_wrap().gap(px(GAP));
-            for (i, e) in entries.iter().enumerate() {
-                grid = grid.child(self.tile(i, e, tile_w, cx));
+            let cols = ((width + GAP) / (TILE_MIN_W + GAP)).floor().max(1.) as usize;
+            let tile_w = ((width - GAP * (cols as f32 - 1.)) / cols as f32).floor();
+            let rows = entries.len().div_ceil(cols);
+            let (first, last) = self.visible(rows, TILE_H + GAP, window);
+            let mut grid =
+                div().flex().flex_col().gap(px(GAP)).when(first > 0, |d| d.child(div().h(px(first as f32 * (TILE_H + GAP) - GAP))));
+            for r in first..last {
+                let mut line = div().flex().gap(px(GAP));
+                for (i, e) in entries.iter().enumerate().skip(r * cols).take(cols) {
+                    line = line.child(self.tile(i, e, tile_w, cx));
+                }
+                grid = grid.child(line);
             }
-            grid.into_any_element()
+            grid.when(last < rows, |d| d.child(div().h(px((rows - last) as f32 * (TILE_H + GAP) - GAP)))).into_any_element()
+        };
+        // Where the list starts in the scrolled page, for the next frame to know which rows show.
+        let mods = {
+            let (scroll, at) = (self.scroll.clone(), self.list_y.clone());
+            let marker = gpui::canvas(
+                move |bounds, window, _| {
+                    let y = f32::from(bounds.origin.y - scroll.bounds().origin.y - scroll.offset().y);
+                    if (y - at.get()).abs() > 0.5 {
+                        at.set(y);
+                        window.refresh();
+                    }
+                },
+                |_, _, _, _| {},
+            )
+            .absolute()
+            .top_0()
+            .left_0()
+            .size_0();
+            div().relative().child(marker).child(mods).into_any_element()
         };
         let search = div().flex_1().min_w(px(200.)).max_w(px(420.)).child(self.search.clone());
         let add = icon_label_button("add-mod", glyph::ADD, text.add_mod, Button::Standard, &t)
@@ -303,6 +351,11 @@ impl MainView {
             .child(caption(text.drop_hint, t.text3).pt(px(24.)))
             .into_any_element()
     }
+}
+
+/// A description on one line: some carry line breaks, which would spill out of a row or tile.
+fn one_line(s: &str) -> String {
+    s.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
 /// An element id from a catalog id.

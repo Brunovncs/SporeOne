@@ -10,11 +10,11 @@ way its Easy Installer does, so both programs see the same mods.
 SporeOne shows the community's mods as a list or a grid, each with its full description. Before it
 installs one, it checks that the mod fits your game and Launcher Kit and warns about installed mods
 that change the same parts of the game, and it installs what the mod depends on first, in order.
-It keeps mods up to date and updates itself from its own releases. You can also add a mod that is
-not in the catalog, from a GitHub link or by dropping its file on the window, and suggest one for
-the catalog with a button.
+It keeps mods up to date, has a switch to skip the opening cutscene, and updates itself from its
+own releases. You can also add a mod that is not in the catalog, from a GitHub link or by dropping
+its file on the window, and suggest one for the catalog with a button.
 
-Version 0.0.5. SporeOne is not made by EA or Maxis, and the mods it lists are their authors' work.
+Version 0.0.6. SporeOne is not made by EA or Maxis, and the mods it lists are their authors' work.
 
 ## Install
 

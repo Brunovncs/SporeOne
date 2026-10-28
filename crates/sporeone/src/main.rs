@@ -14,6 +14,7 @@ mod page;
 mod settings;
 mod text_field;
 mod theme;
+mod tweaks;
 mod ui;
 mod widgets;
 

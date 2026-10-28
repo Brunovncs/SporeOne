@@ -35,6 +35,19 @@ pub fn sandbox() {
     let _ = std::fs::write(game.join("Data/Spore_Content.package"), b"demo");
     let _ = std::fs::write(game.join("DataEP1/Spore_EP1_Data.package"), b"demo");
     let _ = std::fs::write(lk.join(sporeone_core::launcher_kit::LAUNCHER_EXE), b"MZ");
+    for d in [game.join("Data/Config"), game.join("DataEP1/Config")] {
+        let _ = std::fs::create_dir_all(&d);
+        let _ = std::fs::write(
+            d.join("Properties.txt"),
+            "property OptionVersion 0x04754439 uint32
+",
+        );
+        let _ = std::fs::write(
+            d.join("ConfigManager.txt"),
+            "boolProp AlwaysFullscreen true
+",
+        );
+    }
     // The READMEs kept by real runs, so pages show them without the network.
     if let Ok(files) = std::fs::read_dir(&readmes) {
         let kept = root.join("data").join("readmes");
