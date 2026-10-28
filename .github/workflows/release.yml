@@ -86,6 +86,8 @@ jobs:
           (Start-Process $setup -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART' -PassThru).WaitForExit()
           if (-not (Test-Path "$app\sporeone.exe")) { throw "the installer did not install" }
           (Start-Process $setup -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART' -PassThru).WaitForExit()
+          # The setup starts SporeOne again when it is done, as after an update from the app.
+          Stop-Process -Name sporeone -Force -ErrorAction SilentlyContinue
           (Start-Process "$app\unins000.exe" -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES' -PassThru).WaitForExit()
           $deadline = (Get-Date).AddSeconds(60)
           while ((Test-Path "$app\sporeone.exe") -and (Get-Date) -lt $deadline) { Start-Sleep 1 }

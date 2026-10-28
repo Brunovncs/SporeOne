@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.2
+
+A cleaner window. The catalog is a list by default, with mods installed or updated from their row,
+and a grid one click away. Mods not in the catalog can be added from a GitHub link or a file, and
+suggested for the catalog with a GitHub issue; approved suggestions are indexed on their own.
+SporeOne now tells when a new version is out and updates itself. "Play with mods" is now "Play".
+
 ## 0.0.1
 
 The first version. A catalog of 140 Spore mods built from the GitHub repositories tagged

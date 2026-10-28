@@ -2,7 +2,7 @@
 //! downloads, the folders mods are unpacked in, and which release each mod came from (the Launcher
 //! Kit's list has no room for it, and mods without a version need it to know of an update).
 
-use crate::catalog::Catalog;
+use crate::catalog::{Catalog, Entry};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
@@ -36,6 +36,10 @@ pub struct State {
     /// By the Launcher Kit's name for the mod.
     pub origins: BTreeMap<String, Origin>,
     pub lang: Option<String>,
+    /// Mods added from a link, shown with the catalog's until the catalog has them.
+    pub custom: Vec<Entry>,
+    /// The catalog as tiles rather than a list.
+    pub grid: bool,
 }
 
 impl State {

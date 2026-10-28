@@ -65,7 +65,8 @@ Name: "{userprograms}\SporeOne"; Filename: "{app}\sporeone.exe"; WorkingDir: "{a
 Name: "{userdesktop}\SporeOne"; Filename: "{app}\sporeone.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\sporeone.exe"; Description: "{cm:LaunchProgram,SporeOne}"; Flags: nowait postinstall skipifsilent
+; Also after a silent update, so the SporeOne that was open comes back.
+Filename: "{app}\sporeone.exe"; Description: "{cm:LaunchProgram,SporeOne}"; Flags: nowait postinstall
 
 [Code]
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);

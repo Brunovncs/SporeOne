@@ -51,7 +51,6 @@ fn shapes(name: &str) -> String {
         }
         "star" => r#"<path d="M12 3.8l2.5 5.2 5.7.8-4.1 4 1 5.7-5.1-2.7-5.1 2.7 1-5.7-4.1-4 5.7-.8Z"/>"#,
         "block" => r#"<circle cx="12" cy="12" r="8.5"/><path d="M6 18 18 6"/>"#,
-        "library" => r#"<path d="M5 4.5v15M9.5 4.5v15M14 5.2l4.6 14.1"/>"#,
         // A cell: a soft outline with a nucleus, as in Spore's first stage.
         "gameplay" => {
             r#"<path d="M12 3.5c4.6 0 8 3.4 8 7.8 0 4.9-3.7 9.2-8.3 9.2S4 16.9 4 12.3C4 7.5 7.3 3.5 12 3.5Z"/><circle cx="13.5" cy="10.5" r="2.5"/><circle cx="8.6" cy="14.6" r=".9"/>"#
@@ -69,6 +68,11 @@ fn shapes(name: &str) -> String {
         "tools" => {
             r#"<rect x="4" y="7" width="16" height="12" rx="1.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M4 12h16"/>"#
         }
+        "list" => r#"<path d="M8.5 6.5H20M8.5 12H20M8.5 17.5H20M4 6.5h.5M4 12h.5M4 17.5h.5"/>"#,
+        "grid" => {
+            r#"<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>"#
+        }
+        "link" => r#"<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>"#,
         _ => r#"<circle cx="12" cy="12" r="2"/>"#,
     };
     s.to_string()
@@ -78,7 +82,7 @@ fn svg(name: &str, color: Hsla) -> String {
     let c = color.to_rgb();
     let hex = |v: f32| (v.clamp(0., 1.) * 255.).round() as u8;
     format!(
-        r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#{:02x}{:02x}{:02x}" stroke-opacity="{:.3}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{}</svg>"##,
+        r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#{:02x}{:02x}{:02x}" stroke-opacity="{:.3}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">{}</svg>"##,
         hex(c.r),
         hex(c.g),
         hex(c.b),
@@ -133,7 +137,9 @@ mod tests {
             "folder",
             "star",
             "block",
-            "library",
+            "list",
+            "grid",
+            "link",
             "gameplay",
             "fixes",
             "editors",

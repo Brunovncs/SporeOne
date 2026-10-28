@@ -2,7 +2,7 @@
 //! the button that installs, updates or removes it.
 
 use crate::theme::{Theme, icon as glyph, radius};
-use crate::ui::{Have, MainView, Screen, Work, category_icon, category_name, date, issue_text, short_count, size_text};
+use crate::ui::{Have, MainView, Screen, Work, category_name, date, issue_text, short_count, size_text};
 use crate::widgets::{Kind as Button, body, button, caption, card, check_box, display, icon, icon_label_button, radio, strong, title};
 use gpui::prelude::FluentBuilder;
 use gpui::{AnyElement, Context, Div, InteractiveElement, IntoElement, ParentElement, StatefulInteractiveElement, Styled, Window, div, px};
@@ -13,7 +13,7 @@ use sporeone_core::install::{self, Choices};
 use sporeone_core::modinfo::Item;
 
 fn section(t: &Theme, heading: &'static str) -> Div {
-    card(t).flex().flex_col().gap(px(10.)).p(px(20.)).child(title(heading, t.text))
+    div().flex().flex_col().gap(px(12.)).child(title(heading, t.text))
 }
 
 fn fact(label: &'static str, value: String, t: &Theme) -> Div {
@@ -221,8 +221,8 @@ impl MainView {
             .flex()
             .flex_col()
             .gap(px(8.))
-            .p(px(12.))
-            .rounded(px(radius::CONTROL))
+            .p(px(16.))
+            .rounded(px(radius::PANEL))
             .bg(t.caution_layer)
             .child(strong(fill(text.confirm_uninstall, shown), t.text))
             .when(!dependents.is_empty(), |d| d.child(caption(fill(text.dependents_warning, dependents.join(", ")), t.text2)))
@@ -249,40 +249,22 @@ impl MainView {
         let blocked = issues.iter().any(Issue::blocks) && e.kind != Kind::Page;
         let back = icon_label_button("back", glyph::BACK, text.catalog, Button::Subtle, &t)
             .on_click(cx.listener(|this, _, _, cx| this.go(Screen::Catalog, cx)));
-        let chip = crate::home::state_chip(self, e, &t, text);
-        let header = div()
-            .flex()
-            .items_center()
-            .gap(px(16.))
-            .pb(px(24.))
-            .child(
-                div()
-                    .flex()
-                    .flex_none()
-                    .items_center()
-                    .justify_center()
-                    .size(px(64.))
-                    .rounded(px(radius::CARD))
-                    .bg(t.control)
-                    .border_1()
-                    .border_color(t.stroke)
-                    .child(icon(category_icon(e.category), 28., t.accent)),
-            )
-            .child(
-                div()
-                    .flex()
-                    .flex_col()
-                    .gap(px(4.))
-                    .flex_1()
-                    .min_w(px(0.))
-                    .child(div().flex().items_center().gap(px(12.)).child(display(e.name.clone(), t.text)).children(chip))
-                    .child(caption(format!("{} · {}", fill(text.by, &e.author), category_name(e.category, text)), t.text3)),
-            );
+        let chip = crate::home::state_of(self, e, &t, text);
+        let header = div().flex().items_center().gap(px(16.)).pb(px(40.)).child(
+            div()
+                .flex()
+                .flex_col()
+                .gap(px(4.))
+                .flex_1()
+                .min_w(px(0.))
+                .child(div().flex().items_center().gap(px(16.)).child(display(e.name.clone(), t.text)).children(chip))
+                .child(body(format!("{} · {}", fill(text.by, &e.author), category_name(e.category, text)), t.text2)),
+        );
         let notes: Vec<String> = e.notes.iter().map(|n| if self.lang == Lang::Pt { n.pt.clone() } else { n.en.clone() }).collect();
         let left = div()
             .flex()
             .flex_col()
-            .gap(px(16.))
+            .gap(px(32.))
             .flex_1()
             .min_w(px(0.))
             .when(!e.description.is_empty(), |d| d.child(section(&t, text.about_mod).child(body(e.description.clone(), t.text2))))
@@ -337,11 +319,19 @@ impl MainView {
                 icon_label_button("link-home", glyph::OPEN, text.homepage, Button::Subtle, &t).on_click(move |_, _, cx| cx.open_url(&h)),
             );
         }
+        if self.custom_ids.contains(&e.id) {
+            let id = e.id.clone();
+            links = links.child(
+                icon_label_button("remove-custom", glyph::CLOSE, text.remove_custom, Button::Subtle, &t)
+                    .on_click(cx.listener(move |this, _, _, cx| this.remove_custom(&id, cx))),
+            );
+        }
         let right = card(&t)
             .flex()
             .flex_col()
-            .gap(px(16.))
-            .p(px(20.))
+            .gap(px(20.))
+            .p(px(24.))
+            .rounded(px(radius::SURFACE))
             .w(px(320.))
             .flex_none()
             .child(self.actions(e, blocked, cx))
@@ -352,7 +342,7 @@ impl MainView {
             .flex_col()
             .child(div().flex().pb(px(12.)).child(back))
             .child(header)
-            .child(div().flex().items_start().gap(px(16.)).child(left).child(right))
+            .child(div().flex().items_start().gap(px(48.)).child(left).child(right))
             .into_any_element()
     }
 }

@@ -2,7 +2,7 @@
 //! catalog, and the language.
 
 use crate::theme::{Theme, icon as glyph};
-use crate::ui::{MainView, date, store_name};
+use crate::ui::{AppUpdate, MainView, date, store_name};
 use crate::widgets::{Kind as Button, body, caption, display, group, icon, icon_label_button, row, section, segmented, strong};
 use gpui::prelude::FluentBuilder;
 use gpui::{AnyElement, Context, Div, IntoElement, ParentElement, StatefulInteractiveElement, Styled, Window, div, px};
@@ -30,7 +30,7 @@ impl MainView {
         let t = self.theme;
         let text = self.text;
         let env = self.env.clone();
-        let mut game = group();
+        let mut game = group(&t);
         match env.game() {
             None => game = game.child(row(&t).child(icon(glyph::WARNING, 16., t.caution)).child(body(text.game_none, t.text).flex_1())),
             Some(g) => {
@@ -74,7 +74,7 @@ impl MainView {
             }
         }
 
-        let mut lk = group().child(row(&t).child(caption(text.lk_about, t.text2).flex_1()));
+        let mut lk = group(&t).child(row(&t).child(caption(text.lk_about, t.text2).flex_1().min_w(px(0.))));
         match &env.lk {
             None => {
                 let busy = self.busy.contains_key("launcher-kit");
@@ -129,9 +129,9 @@ impl MainView {
         let built = date(&self.catalog.generated, self.lang);
         let refreshing = self.refreshing;
         let catalog =
-            group()
+            group(&t)
                 .child(
-                    row(&t).child(caption(fill(text.catalog_built, built), t.text2).flex_1()).child(
+                    row(&t).child(caption(fill(text.catalog_built, built), t.text2).flex_1().min_w(px(0.))).child(
                         icon_label_button(
                             "refresh",
                             glyph::REFRESH,
@@ -147,7 +147,7 @@ impl MainView {
                     row(&t).child(icon(glyph::WARNING, 16., t.caution)).child(body(fill(text.catalog_failed, e), t.text).flex_1())
                 }));
 
-        let language = group().child(row(&t).child(body(text.language, t.text).flex_1()).child(segmented(
+        let language = group(&t).child(row(&t).child(body(text.language, t.text).flex_1()).child(segmented(
             "lang",
             vec![(Lang::En, "English".into()), (Lang::Pt, "Português".into())],
             self.lang,
@@ -156,21 +156,39 @@ impl MainView {
             |this, l, cx| this.set_lang(l, cx),
         )));
 
-        let about = group().child(
-            row(&t).child(
+        let (state, label, ready) = match &self.app_update {
+            None => (String::new(), text.update_check, false),
+            Some(AppUpdate::Checking) => (String::new(), text.update_checking, false),
+            Some(AppUpdate::Latest) => (text.update_latest.to_string(), text.update_check, false),
+            Some(AppUpdate::Available(r)) => (fill(text.app_update, &r.version), text.update_now, true),
+            Some(AppUpdate::Working(r)) => (fill(text.app_update, &r.version), text.update_working, true),
+            Some(AppUpdate::Failed(_, e)) => (fill(text.update_failed, e), text.update_now, true),
+        };
+        let busy = matches!(self.app_update, Some(AppUpdate::Checking | AppUpdate::Working(_)));
+        let updates = row(&t)
+            .child(
                 div()
                     .flex()
                     .flex_col()
-                    .gap(px(8.))
                     .flex_1()
+                    .min_w(px(0.))
                     .child(strong(concat!("SporeOne ", env!("CARGO_PKG_VERSION")), t.text))
-                    .child(caption(text.about_body, t.text2))
-                    .child(
-                        div().flex().child(
-                            icon_label_button("source", glyph::OPEN, text.source_code, Button::Subtle, &t)
-                                .on_click(|_, _, cx| cx.open_url(env!("CARGO_PKG_REPOSITORY"))),
-                        ),
+                    .when(!state.is_empty(), |d| d.child(caption(state, if ready { t.accent } else { t.text2 }))),
+            )
+            .child(
+                icon_label_button("app-update", glyph::REFRESH, label, if ready { Button::Primary } else { Button::Standard }, &t)
+                    .when(busy, |d| d.opacity(0.6).cursor_default())
+                    .on_click(cx.listener(move |this, _, _, cx| if ready { this.start_app_update(cx) } else { this.check_app_update(cx) })),
+            );
+
+        let about = group(&t).child(updates).child(
+            row(&t).child(
+                div().flex().flex_col().gap(px(8.)).flex_1().py(px(4.)).child(caption(text.about_body, t.text2)).child(
+                    div().flex().child(
+                        icon_label_button("source", glyph::OPEN, text.source_code, Button::Subtle, &t)
+                            .on_click(|_, _, cx| cx.open_url(env!("CARGO_PKG_REPOSITORY"))),
                     ),
+                ),
             ),
         );
 

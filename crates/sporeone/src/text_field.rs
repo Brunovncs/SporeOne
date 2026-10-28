@@ -112,6 +112,8 @@ pub struct TextField {
     focus: FocusHandle,
     buf: Buffer,
     placeholder: SharedString,
+    /// Drawn at the start of the field, as a search field's magnifier.
+    icon: Option<&'static str>,
     /// How many lines a multi-line field shows: it starts at the first and grows to the second.
     lines: (usize, usize),
     /// Made again when light and dark or the accent colour change.
@@ -142,6 +144,7 @@ impl TextField {
             focus: cx.focus_handle(),
             buf: Buffer { multiline, max_chars, ..Default::default() },
             placeholder: SharedString::default(),
+            icon: None,
             lines: (3, 6),
             theme: None,
             layout: None,
@@ -160,6 +163,11 @@ impl TextField {
     /// Shown in the text's colour for hints while the field is empty.
     pub fn placeholder(mut self, text: impl Into<SharedString>) -> TextField {
         self.placeholder = text.into();
+        self
+    }
+
+    pub fn icon(mut self, name: &'static str) -> TextField {
+        self.icon = Some(name);
         self
     }
 
@@ -585,17 +593,20 @@ impl Render for TextField {
             .on_mouse_move(cx.listener(Self::mouse_move))
             .on_scroll_wheel(cx.listener(Self::scroll_wheel))
             .w_full()
-            .px(px(11.))
-            .py(px(6.))
+            .relative()
+            .pl(px(if self.icon.is_some() { 42. } else { 16. }))
+            .pr(px(16.))
+            .py(px(7.))
             .rounded(px(radius::CONTROL))
             .border_1()
-            .border_color(if focused { t.accent } else { t.stroke_strong })
-            .bg(if focused { t.layer } else { t.control })
+            .border_color(if focused { t.text3 } else { t.stroke_strong })
+            .bg(t.layer)
             .when(!focused, |d| d.hover(move |s| s.bg(hover)))
             .font_family(FONT)
             .text_size(px(text::BODY.0))
             .line_height(px(text::BODY.1))
             .text_color(t.text)
+            .children(self.icon.map(|name| div().absolute().left(px(16.)).top(px(9.)).child(crate::widgets::icon(name, 16., t.text3))))
             .child(FieldText { field: cx.entity(), colors })
     }
 }

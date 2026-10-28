@@ -1,0 +1,60 @@
+name: Suggest a mod
+description: Ask for a mod to be listed in SporeOne's catalog.
+title: "Suggest: "
+labels: [mod-suggestion]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A mod on GitHub is listed automatically once a maintainer approves this suggestion. Mods published on other sites are added to the catalog by hand.
+  - type: input
+    id: link
+    attributes:
+      label: Link to the mod
+      description: Its GitHub repository, or the page where it is published.
+      placeholder: https://github.com/owner/repository
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Name
+    validations:
+      required: true
+  - type: input
+    id: author
+    attributes:
+      label: Author
+  - type: textarea
+    id: description
+    attributes:
+      label: Short description
+      description: One or two sentences on what the mod does.
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Gameplay
+        - Fixes
+        - Editors
+        - Visuals
+        - Multiplayer
+        - Tools
+    validations:
+      required: true
+  - type: checkboxes
+    id: needs
+    attributes:
+      label: Anything to know
+      options:
+        - label: It needs Galactic Adventures
+        - label: It comes with its own installer
+        - label: It does not work with some other mods
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Which mods it conflicts with, which copy of the game it needs, or anything else worth knowing.

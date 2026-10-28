@@ -1,18 +1,22 @@
 name: Catalog
 
-# Builds catalog.json from the repositories tagged spore-mod and catalog/curated.json, and
-# publishes it on the catalog branch, where SporeOne downloads it from. Only a change in the mods
-# makes a commit: the build time alone does not.
+# Builds catalog.json from the repositories tagged spore-mod, the mods suggested in issues that a
+# maintainer labeled approved, and catalog/curated.json, and publishes it on the catalog branch,
+# where SporeOne downloads it from. Only a change in the mods makes a commit: the build time alone
+# does not. Labeling a suggestion runs it, so an approved mod is listed within minutes.
 on:
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
+  issues:
+    types: [labeled, unlabeled]
   push:
     branches: [main]
     paths: [catalog/curated.json, crates/sporeone-core/src/**, crates/sporeone-catalog/**]
 
 permissions:
   contents: write
+  issues: read
 
 concurrency:
   group: catalog
@@ -20,6 +24,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'issues' || github.event.label.name == 'approved' || github.event.label.name == 'mod-suggestion'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

@@ -3,7 +3,9 @@
 
 use crate::theme::{icon as glyph, radius};
 use crate::ui::{Have, MainView, Screen, Work, category_icon};
-use crate::widgets::{Kind as Button, body, button, caption, chip, display, group, icon, icon_button, icon_label_button, row, title};
+use crate::widgets::{
+    Kind as Button, body, button, caption, display, group, icon, icon_button, icon_label_button, row, status, strong, title,
+};
 use gpui::prelude::FluentBuilder;
 use gpui::{AnyElement, Context, IntoElement, ParentElement, StatefulInteractiveElement, Styled, Window, div, px};
 use sporeone_core::catalog::{Category, Entry};
@@ -68,17 +70,7 @@ impl MainView {
                 })))
         };
         row(&t)
-            .child(
-                div()
-                    .flex()
-                    .flex_none()
-                    .items_center()
-                    .justify_center()
-                    .size(px(36.))
-                    .rounded(px(radius::CONTROL))
-                    .bg(t.control)
-                    .child(icon(category_icon(category), 18., t.accent)),
-            )
+            .child(icon(category_icon(category), 20., t.text3))
             .child(
                 div()
                     .flex()
@@ -90,8 +82,8 @@ impl MainView {
                             .flex()
                             .items_center()
                             .gap(px(8.))
-                            .child(body(m.shown_name().to_string(), t.text).truncate())
-                            .when(outdated, |d| d.child(chip(text.chip_update, t.on_accent, t.accent))),
+                            .child(strong(m.shown_name().to_string(), t.text).truncate())
+                            .when(outdated, |d| d.child(status(text.chip_update, t.accent, t.text))),
                     )
                     .child(caption(line, t.text3).truncate()),
             )
@@ -103,24 +95,14 @@ impl MainView {
         let t = self.theme;
         let id = e.id.clone();
         row(&t)
-            .child(
-                div()
-                    .flex()
-                    .flex_none()
-                    .items_center()
-                    .justify_center()
-                    .size(px(36.))
-                    .rounded(px(radius::CONTROL))
-                    .bg(t.control)
-                    .child(icon(category_icon(e.category), 18., t.accent)),
-            )
+            .child(icon(category_icon(e.category), 20., t.text3))
             .child(
                 div()
                     .flex()
                     .flex_col()
                     .flex_1()
                     .min_w(px(0.))
-                    .child(body(e.name.clone(), t.text))
+                    .child(strong(e.name.clone(), t.text))
                     .child(caption(self.text.own_installer, t.text3)),
             )
             .child(
@@ -138,7 +120,7 @@ impl MainView {
         let external: Vec<Entry> = self.external().into_iter().cloned().collect();
         let updates = self.updates().len();
         let total = mods.len() + external.len();
-        let mut list = group();
+        let mut list = group(&t);
         for (i, m) in mods.iter().enumerate() {
             list = list.child(self.installed_row(i, m, cx));
         }
@@ -149,22 +131,18 @@ impl MainView {
             .flex()
             .flex_col()
             .items_center()
-            .gap(px(12.))
-            .py(px(56.))
+            .gap(px(8.))
+            .py(px(64.))
             .px(px(24.))
-            .rounded(px(radius::TILE))
+            .rounded(px(radius::PANEL))
             .border_1()
             .border_dashed()
             .border_color(t.stroke_strong)
-            .child(div().flex().items_center().justify_center().size(px(56.)).rounded_full().bg(t.control).child(icon(
-                glyph::LIBRARY,
-                24.,
-                t.text2,
-            )))
             .child(title(text.installed_empty, t.text))
             .child(body(text.installed_empty_body, t.text2).text_center().max_w(px(460.)))
             .child(
                 button("to-catalog", text.catalog, Button::Standard, &t)
+                    .mt(px(12.))
                     .on_click(cx.listener(|this, _, _, cx| this.go(Screen::Catalog, cx))),
             );
         let banner = self.setup_problem().map(|p| crate::ui::banner(p, Some(crate::ui::needed_button(text, &t, cx)), &t));
@@ -176,7 +154,7 @@ impl MainView {
                     .flex()
                     .items_center()
                     .gap(px(16.))
-                    .pb(px(20.))
+                    .pb(px(24.))
                     .child(
                         div()
                             .flex()
@@ -184,14 +162,14 @@ impl MainView {
                             .gap(px(12.))
                             .flex_1()
                             .child(display(text.installed, t.text))
-                            .child(caption(if total == 0 { String::new() } else { fill(text.mods_count, total) }, t.text3).pb(px(6.)))
+                            .child(caption(if total == 0 { String::new() } else { fill(text.mods_count, total) }, t.text3).pb(px(8.)))
                             .when(updates > 0, |d| {
                                 d.child(
                                     caption(
                                         if updates == 1 { text.update_one.to_string() } else { fill(text.updates_count, updates) },
                                         t.accent,
                                     )
-                                    .pb(px(6.)),
+                                    .pb(px(8.)),
                                 )
                             }),
                     )

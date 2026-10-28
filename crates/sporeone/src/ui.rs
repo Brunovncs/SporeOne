@@ -1,23 +1,26 @@
-//! The window: a bar on top, and under it one of four screens: the catalog as tiles, one mod's
-//! page, what is installed, or the settings with what the game and the Launcher Kit need. Files
-//! dropped anywhere on it are installed.
+//! The window: a bar on top, and under it one of four screens: the catalog as a list or as tiles,
+//! one mod's page, what is installed, or the settings with what the game and the Launcher Kit
+//! need. Files dropped anywhere on it are installed.
 
 use crate::text_field::{TextField, TextFieldEvent};
 use crate::theme::{FONT, Theme, icon as glyph, layout, radius};
-use crate::widgets::{Kind, body, button, caption, icon, icon_button, icon_label_button, strong};
+use crate::widgets::{Kind, body, button, caption, icon, icon_button, icon_label_button, title};
 use gpui::prelude::FluentBuilder;
 use gpui::{
-    AnyElement, AppContext, Context, Entity, ExternalPaths, FocusHandle, Image, ImageFormat, InteractiveElement, IntoElement, KeyDownEvent,
-    MouseButton, ParentElement, Render, StatefulInteractiveElement, Styled, Subscription, Window, WindowAppearance, div, img, px,
+    AnyElement, AppContext, Context, Entity, ExternalPaths, FocusHandle, Focusable, Image, ImageFormat, InteractiveElement, IntoElement,
+    KeyDownEvent, MouseButton, ParentElement, PathPromptOptions, Render, StatefulInteractiveElement, Styled, Subscription, Window,
+    WindowAppearance, div, img, px,
 };
 use sporeone_core::actions::{self, Failure};
 use sporeone_core::catalog::{Catalog, Category, Entry};
 use sporeone_core::compat::{self, Env, Issue};
+use sporeone_core::github;
 use sporeone_core::i18n::{self, Lang, Text, fill};
 use sporeone_core::install::Choices;
 use sporeone_core::installed::InstalledMod;
 use sporeone_core::state::{Origin, State};
-use std::collections::{BTreeMap, HashMap};
+use sporeone_core::update::{self, Release};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::path::PathBuf;
 use std::sync::Arc;
 
@@ -45,6 +48,29 @@ pub enum Sort {
     Popular,
     Recent,
     Name,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum View {
+    List,
+    Grid,
+}
+
+/// Where a newer SporeOne stands.
+#[derive(Clone)]
+pub enum AppUpdate {
+    Checking,
+    Latest,
+    Available(Release),
+    Working(Release),
+    Failed(Release, String),
+}
+
+/// The dialog that adds a mod from a link or a file.
+pub struct Adding {
+    pub link: Entity<TextField>,
+    pub working: bool,
+    pub error: Option<String>,
 }
 
 /// What is being done to a mod right now.
@@ -76,7 +102,16 @@ pub struct MainView {
     pub screen: Screen,
     pub lang: Lang,
     pub text: &'static Text,
+    /// The catalog with the mods added from a link.
     pub catalog: Arc<Catalog>,
+    /// The catalog as downloaded.
+    base: Arc<Catalog>,
+    /// The mods added from a link, and which of them the catalog does not have.
+    custom: Vec<Entry>,
+    pub custom_ids: HashSet<String>,
+    pub view: View,
+    pub adding: Option<Adding>,
+    pub app_update: Option<AppUpdate>,
     pub env: Arc<Env>,
     pub origins: BTreeMap<String, Origin>,
     pub search: Entity<TextField>,
@@ -113,7 +148,7 @@ impl MainView {
             .or_else(|| saved.lang.as_deref().and_then(Lang::from_code))
             .unwrap_or_else(Lang::system);
         let text = i18n::text(lang);
-        let search = cx.new(|cx| TextField::new(cx, false, 80).placeholder(text.search));
+        let search = cx.new(|cx| TextField::new(cx, false, 80).placeholder(text.search).icon(glyph::SEARCH));
         let searched = cx.subscribe(&search, |this: &mut MainView, field, _: &TextFieldEvent, cx| {
             this.query = field.read(cx).text();
             if this.screen != Screen::Catalog {
@@ -141,7 +176,8 @@ impl MainView {
         });
         let focus = cx.focus_handle();
         focus.focus(window, cx);
-        let catalog = if demo { crate::demo::catalog() } else { sporeone_core::state::cached_catalog() };
+        let base = Arc::new(if demo { crate::demo::catalog() } else { sporeone_core::state::cached_catalog() });
+        let (catalog, custom_ids) = merged(&base, &saved.custom);
         let mut view = MainView {
             theme: theme(window),
             focus,
@@ -149,6 +185,12 @@ impl MainView {
             lang,
             text,
             catalog: Arc::new(catalog),
+            base,
+            custom: saved.custom,
+            custom_ids,
+            view: if saved.grid { View::Grid } else { View::List },
+            adding: None,
+            app_update: None,
             env: Arc::new(read_env(demo)),
             origins: if demo { crate::demo::origins() } else { saved.origins },
             search,
@@ -168,14 +210,22 @@ impl MainView {
         };
         // `--demo` with `SPOREONE_PAGE`: a screen other than the catalog, for screenshots.
         if demo && let Ok(page) = std::env::var("SPOREONE_PAGE") {
-            view.screen = match page.as_str() {
-                "installed" => Screen::Installed,
-                "settings" => Screen::Settings,
-                id => Screen::Mod(id.to_string()),
-            };
+            match page.as_str() {
+                "installed" => view.screen = Screen::Installed,
+                "settings" => view.screen = Screen::Settings,
+                "grid" => view.view = View::Grid,
+                "add" => view.open_adding(window, cx),
+                id => view.screen = Screen::Mod(id.to_string()),
+            }
+        }
+        // `--demo` with `SPOREONE_UPDATE=x.y.z`: the bar for a newer SporeOne.
+        if demo && let Ok(version) = std::env::var("SPOREONE_UPDATE") {
+            let page = update::RELEASES_PAGE.to_string();
+            view.app_update = Some(AppUpdate::Available(Release { version, page, setup: None }));
         }
         if !demo {
             view.refresh_catalog(cx);
+            view.check_app_update(cx);
         }
         view
     }
@@ -250,7 +300,10 @@ impl MainView {
             let _ = this.update(cx, |this, cx| {
                 this.refreshing = false;
                 match got {
-                    Ok(c) if c.generated >= this.catalog.generated => this.catalog = Arc::new(c),
+                    Ok(c) if c.generated >= this.base.generated => {
+                        this.base = Arc::new(c);
+                        this.remerge();
+                    }
                     Ok(_) => {}
                     Err(e) => this.catalog_error = Some(e),
                 }
@@ -294,6 +347,152 @@ impl MainView {
                     Err(e) => Notice { ok: false, text: fill(t.failed, e) },
                 });
                 cx.notify();
+            });
+        })
+        .detach();
+    }
+
+    fn remerge(&mut self) {
+        let (catalog, ids) = merged(&self.base, &self.custom);
+        self.catalog = Arc::new(catalog);
+        self.custom_ids = ids;
+    }
+
+    pub fn set_view(&mut self, view: View, cx: &mut Context<Self>) {
+        self.view = view;
+        let mut st = State::load();
+        st.grid = view == View::Grid;
+        let _ = st.save();
+        cx.notify();
+    }
+
+    pub fn open_adding(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let placeholder = self.text.add_link;
+        let link = cx.new(|cx| TextField::new(cx, false, 200).placeholder(placeholder).icon(glyph::LINK));
+        let submitted = cx.subscribe(&link, |this: &mut MainView, _, ev: &TextFieldEvent, cx| {
+            if matches!(ev, TextFieldEvent::Submit) {
+                this.add_from_link(cx);
+            }
+        });
+        submitted.detach();
+        link.read(cx).focus_handle(cx).focus(window, cx);
+        self.adding = Some(Adding { link, working: false, error: None });
+        cx.notify();
+    }
+
+    /// Reads the repository the link points to and lists its mod with the catalog's.
+    pub fn add_from_link(&mut self, cx: &mut Context<Self>) {
+        let text = self.text;
+        let Some(adding) = &mut self.adding else { return };
+        if adding.working {
+            return;
+        }
+        let input = adding.link.read(cx).text();
+        let Some(repo) = github::parse_repo(&input) else {
+            adding.error = Some(text.add_bad_link.to_string());
+            cx.notify();
+            return;
+        };
+        if let Some(e) = self.catalog.mods.iter().find(|e| e.id.eq_ignore_ascii_case(&repo)) {
+            let id = e.id.clone();
+            self.adding = None;
+            self.go(Screen::Mod(id), cx);
+            return;
+        }
+        adding.working = true;
+        adding.error = None;
+        cx.notify();
+        cx.spawn(async move |this, cx| {
+            let got = cx.background_executor().spawn(async move { github::entry(&repo, None, false) }).await;
+            let _ = this.update(cx, |this, cx| match got {
+                Ok(e) => {
+                    let id = e.id.clone();
+                    let mut st = State::load();
+                    st.custom.retain(|c| c.id != id);
+                    st.custom.push(e.clone());
+                    let _ = st.save();
+                    this.custom.retain(|c| c.id != id);
+                    this.custom.push(e);
+                    this.remerge();
+                    this.adding = None;
+                    this.go(Screen::Mod(id), cx);
+                }
+                Err(err) => {
+                    if let Some(a) = &mut this.adding {
+                        a.working = false;
+                        a.error = Some(err);
+                    }
+                    cx.notify();
+                }
+            });
+        })
+        .detach();
+    }
+
+    /// Asks for .sporemod and .package files and installs them.
+    pub fn pick_files(&mut self, cx: &mut Context<Self>) {
+        let picked = cx.prompt_for_paths(PathPromptOptions { files: true, directories: false, multiple: true, prompt: None });
+        cx.spawn(async move |this, cx| {
+            if let Ok(Ok(Some(paths))) = picked.await {
+                let _ = this.update(cx, |this, cx| {
+                    this.adding = None;
+                    this.install_files(paths, cx);
+                });
+            }
+        })
+        .detach();
+    }
+
+    /// Takes a mod added from a link off the list. What is installed stays.
+    pub fn remove_custom(&mut self, id: &str, cx: &mut Context<Self>) {
+        let mut st = State::load();
+        st.custom.retain(|c| c.id != id);
+        let _ = st.save();
+        self.custom.retain(|c| c.id != id);
+        self.remerge();
+        self.go(Screen::Catalog, cx);
+    }
+
+    /// Asks GitHub whether a newer SporeOne is out.
+    pub fn check_app_update(&mut self, cx: &mut Context<Self>) {
+        if matches!(self.app_update, Some(AppUpdate::Checking | AppUpdate::Working(_))) {
+            return;
+        }
+        self.app_update = Some(AppUpdate::Checking);
+        cx.notify();
+        cx.spawn(async move |this, cx| {
+            let got = cx.background_executor().spawn(async { update::check() }).await;
+            let _ = this.update(cx, |this, cx| {
+                this.app_update = match got {
+                    Ok(Some(r)) => Some(AppUpdate::Available(r)),
+                    Ok(None) => Some(AppUpdate::Latest),
+                    Err(_) => None,
+                };
+                cx.notify();
+            });
+        })
+        .detach();
+    }
+
+    /// Downloads the new setup and starts it, which closes SporeOne and opens it again updated.
+    /// Without a setup to run (SporeOne came from the zip), opens the release's page.
+    pub fn start_app_update(&mut self, cx: &mut Context<Self>) {
+        let (Some(AppUpdate::Available(r)) | Some(AppUpdate::Failed(r, _))) = self.app_update.clone() else { return };
+        if !update::installed_by_setup() || r.setup.is_none() {
+            cx.open_url(&r.page);
+            return;
+        }
+        self.app_update = Some(AppUpdate::Working(r.clone()));
+        cx.notify();
+        cx.spawn(async move |this, cx| {
+            let job = r.clone();
+            let got = cx.background_executor().spawn(async move { update::download_setup(&job).and_then(|f| update::run_setup(&f)) }).await;
+            let _ = this.update(cx, |this, cx| match got {
+                Ok(()) => cx.quit(),
+                Err(e) => {
+                    this.app_update = Some(AppUpdate::Failed(r, e));
+                    cx.notify();
+                }
             });
         })
         .detach();
@@ -380,7 +579,10 @@ impl MainView {
 
     fn key_down(&mut self, ev: &KeyDownEvent, _: &mut Window, cx: &mut Context<Self>) {
         if ev.keystroke.key == "escape" {
-            if self.confirm.is_some() {
+            if self.adding.is_some() {
+                self.adding = None;
+                cx.notify();
+            } else if self.confirm.is_some() {
                 self.confirm = None;
                 cx.notify();
             } else if self.screen != Screen::Catalog {
@@ -399,13 +601,12 @@ impl MainView {
             .id(id)
             .flex()
             .items_center()
-            .h(px(34.))
-            .px(px(12.))
-            .rounded(px(radius::CONTROL))
+            .h(px(30.))
+            .px(px(14.))
+            .rounded_full()
             .cursor_pointer()
-            .when(on, |d| d.bg(t.control))
-            .hover(move |s| s.bg(t.control))
-            .child(body(label, if on { t.text } else { t.text2 }))
+            .when(on, |d| d.bg(t.layer).border_1().border_color(t.stroke_strong))
+            .child(body(label, if on { t.text } else { t.text2 }).font_weight(gpui::FontWeight::MEDIUM))
             .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
             .on_click(cx.listener(move |this, _, _, cx| this.go(screen.clone(), cx)))
             .into_any_element()
@@ -430,17 +631,23 @@ impl MainView {
             .on_click(cx.listener(|this, _, _, cx| this.go(Screen::Catalog, cx)))
             .when(framed, |d| d.on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation()))
             .child(mark)
-            .child(strong("SporeOne", t.text))
-            .child(caption(concat!("v", env!("CARGO_PKG_VERSION")), t.text2));
+            .child(title("SporeOne", t.text));
         let count = self.env.installed.mods.len() + self.external().len();
         let installed = if count == 0 { text.installed.to_string() } else { format!("{} {count}", text.installed) };
         let updates = !self.updates().is_empty();
-        let nav =
-            div().flex().items_center().gap(px(4.)).child(self.nav("nav-catalog", text.catalog.to_string(), Screen::Catalog, cx)).child(
+        let nav = div()
+            .flex()
+            .items_center()
+            .gap(px(2.))
+            .p(px(3.))
+            .rounded_full()
+            .bg(t.control)
+            .child(self.nav("nav-catalog", text.catalog.to_string(), Screen::Catalog, cx))
+            .child(
                 div()
                     .relative()
                     .child(self.nav("nav-installed", installed, Screen::Installed, cx))
-                    .when(updates, |d| d.child(div().absolute().top(px(6.)).right(px(4.)).size(px(7.)).rounded_full().bg(t.accent))),
+                    .when(updates, |d| d.child(div().absolute().top(px(4.)).right(px(6.)).size(px(7.)).rounded_full().bg(t.accent))),
             );
         let can_play = self.env.lk.is_some() && self.env.game().is_some_and(|g| g.has_ga());
         let play = crate::widgets::with_tip(
@@ -467,11 +674,11 @@ impl MainView {
             )))
             .when(attention, |d| d.child(div().absolute().top(px(6.)).right(px(6.)).size(px(8.)).rounded_full().bg(t.caution)))
             .when(framed, |d| d.on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation()));
-        let bar = div().flex().flex_none().justify_center().h(px(56.)).border_b_1().border_color(t.stroke);
+        let bar = div().flex().flex_none().justify_center().h(px(60.)).border_b_1().border_color(t.stroke);
         let row = div()
             .flex()
             .items_center()
-            .gap(px(16.))
+            .gap(px(20.))
             .w_full()
             .max_w(px(layout::MAX_W))
             .px(px(layout::GUTTER - 6.))
@@ -481,6 +688,127 @@ impl MainView {
             .child(play)
             .child(gear);
         self.title_bar(bar, row, window, cx).into_any_element()
+    }
+
+    /// A newer SporeOne, under the bar on top, until it is dismissed.
+    fn update_bar(&self, cx: &mut Context<Self>) -> Option<AnyElement> {
+        let t = self.theme;
+        let text = self.text;
+        let (r, working, error) = match self.app_update.as_ref()? {
+            AppUpdate::Available(r) => (r, false, None),
+            AppUpdate::Working(r) => (r, true, None),
+            AppUpdate::Failed(r, e) => (r, false, Some(e.clone())),
+            _ => return None,
+        };
+        let page = r.page.clone();
+        let label = if working {
+            text.update_working
+        } else if update::installed_by_setup() && r.setup.is_some() {
+            text.update_now
+        } else {
+            text.update_download
+        };
+        let message = match error {
+            Some(e) => fill(text.update_failed, e),
+            None => fill(text.app_update, &r.version),
+        };
+        Some(
+            div()
+                .flex()
+                .flex_none()
+                .justify_center()
+                .bg(t.layer)
+                .border_b_1()
+                .border_color(t.stroke)
+                .child(
+                    div()
+                        .flex()
+                        .items_center()
+                        .gap(px(12.))
+                        .w_full()
+                        .max_w(px(layout::MAX_W))
+                        .px(px(layout::GUTTER))
+                        .py(px(8.))
+                        .child(div().flex_none().size(px(8.)).rounded_full().bg(t.accent))
+                        .child(body(message, t.text).flex_1().min_w(px(0.)))
+                        .child(button("update-notes", text.update_notes, Kind::Subtle, &t).on_click(move |_, _, cx| cx.open_url(&page)))
+                        .child(
+                            button("update-now", label, Kind::Primary, &t)
+                                .when(working, |d| d.opacity(0.6).cursor_default())
+                                .on_click(cx.listener(|this, _, _, cx| this.start_app_update(cx))),
+                        )
+                        .when(!working, |d| {
+                            d.child(icon_button("update-close", glyph::CLOSE, &t).on_click(cx.listener(|this, _, _, cx| {
+                                this.app_update = None;
+                                cx.notify();
+                            })))
+                        }),
+                )
+                .into_any_element(),
+        )
+    }
+
+    /// The dialog that adds a mod from a GitHub link or a file, over the screen.
+    fn adding_dialog(&self, cx: &mut Context<Self>) -> Option<AnyElement> {
+        let t = self.theme;
+        let text = self.text;
+        let a = self.adding.as_ref()?;
+        let working = a.working;
+        let add = button("add-link", if working { text.add_working } else { text.add_from_link }, Kind::Primary, &t)
+            .when(working, |d| d.opacity(0.6).cursor_default())
+            .on_click(cx.listener(|this, _, _, cx| this.add_from_link(cx)));
+        let panel = div()
+            .id("adding")
+            .flex()
+            .flex_col()
+            .gap(px(16.))
+            .w(px(520.))
+            .p(px(28.))
+            .rounded(px(radius::SURFACE))
+            .bg(t.layer)
+            .border_1()
+            .border_color(t.stroke)
+            .shadow_lg()
+            .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
+            .child(crate::widgets::heading(text.add_mod, t.text))
+            .child(body(text.add_body, t.text2))
+            .child(div().flex().items_center().gap(px(8.)).child(div().flex_1().min_w(px(0.)).child(a.link.clone())).child(add))
+            .children(a.error.clone().map(|e| body(e, t.critical)))
+            .child(div().h(px(1.)).bg(t.stroke).my(px(4.)))
+            .child(
+                div()
+                    .flex()
+                    .items_center()
+                    .gap(px(12.))
+                    .child(caption(text.suggest_body, t.text2).flex_1().min_w(px(0.)))
+                    .child(button("suggest", text.suggest, Kind::Subtle, &t).on_click(|_, _, cx| cx.open_url(github::SUGGEST_URL)))
+                    .child(
+                        icon_label_button("pick-file", glyph::FOLDER, text.add_pick_file, Kind::Standard, &t)
+                            .on_click(cx.listener(|this, _, _, cx| this.pick_files(cx))),
+                    ),
+            );
+        Some(
+            div()
+                .id("scrim")
+                .absolute()
+                .inset_0()
+                .flex()
+                .items_center()
+                .justify_center()
+                .bg(t.scrim)
+                .occlude()
+                .on_mouse_down(
+                    MouseButton::Left,
+                    cx.listener(|this, _, _, cx| {
+                        if this.adding.as_ref().is_some_and(|a| !a.working) {
+                            this.adding = None;
+                            cx.notify();
+                        }
+                    }),
+                )
+                .child(panel)
+                .into_any_element(),
+        )
     }
 
     /// How the last install or uninstall went, under the bar on top.
@@ -515,6 +843,19 @@ impl MainView {
                 .into_any_element(),
         )
     }
+}
+
+/// The catalog with the mods added from a link that it does not have, and their ids.
+fn merged(base: &Catalog, custom: &[Entry]) -> (Catalog, HashSet<String>) {
+    let mut catalog = base.clone();
+    let mut ids = HashSet::new();
+    for e in custom {
+        if catalog.get(&e.id).is_none() {
+            ids.insert(e.id.clone());
+            catalog.mods.push(e.clone());
+        }
+    }
+    (catalog, ids)
 }
 
 /// An issue, said plainly.
@@ -652,6 +993,7 @@ impl Render for MainView {
             .drag_over::<ExternalPaths>(move |s, _, _, _| s.bg(t.accent_soft))
             .on_drop(cx.listener(|this, paths: &ExternalPaths, _, cx| this.install_files(paths.paths().to_vec(), cx)))
             .child(self.top_bar(window, cx))
+            .children(self.update_bar(cx))
             .children(self.notice_bar(cx))
             .child(
                 div().id("scroll").flex_1().min_h(px(0.)).overflow_y_scroll().child(
@@ -659,9 +1001,10 @@ impl Render for MainView {
                         .flex()
                         .justify_center()
                         .w_full()
-                        .child(div().w_full().max_w(px(max_w)).px(px(layout::GUTTER)).pt(px(28.)).pb(px(40.)).child(content)),
+                        .child(div().w_full().max_w(px(max_w)).px(px(layout::GUTTER)).pt(px(32.)).pb(px(48.)).child(content)),
                 ),
-            );
+            )
+            .children(self.adding_dialog(cx));
         crate::frame::frame(page.into_any_element(), &t, window)
     }
 }
@@ -672,10 +1015,10 @@ pub fn banner(message: String, action: Option<AnyElement>, t: &Theme) -> gpui::D
         .flex()
         .items_center()
         .gap(px(12.))
-        .px(px(16.))
+        .px(px(20.))
         .py(px(12.))
-        .mb(px(20.))
-        .rounded(px(radius::CARD))
+        .mb(px(24.))
+        .rounded(px(radius::PANEL))
         .bg(t.caution_layer)
         .border_1()
         .border_color(t.stroke)
@@ -704,5 +1047,14 @@ mod tests {
         assert_eq!(date("2026-10-07T21:33:52Z", Lang::Pt), "07/10/2026");
         assert_eq!(date("", Lang::Pt), "");
         assert_eq!(size_text(3_312_270), "3.2 MB");
+    }
+
+    #[test]
+    fn added_mods_join_the_catalog_until_it_has_them() {
+        let entry = |id: &str| Entry { id: id.into(), name: id.into(), ..Default::default() };
+        let base = Catalog { mods: vec![entry("a/listed")], ..Default::default() };
+        let (catalog, ids) = merged(&base, &[entry("a/listed"), entry("b/mine")]);
+        assert_eq!(catalog.mods.iter().map(|e| e.id.as_str()).collect::<Vec<_>>(), ["a/listed", "b/mine"]);
+        assert_eq!(ids, HashSet::from(["b/mine".to_string()]));
     }
 }

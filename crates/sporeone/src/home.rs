@@ -1,9 +1,12 @@
-//! The first screen: every mod in the catalog as a tile, found by words or by kind, most
-//! downloaded first. What keeps mods from being installed at all shows above them.
+//! The first screen: every mod in the catalog, as a list or as tiles, found by words or by kind,
+//! most downloaded first. A mod without options installs from its row; what keeps mods from being
+//! installed at all shows above them.
 
 use crate::theme::{Theme, icon as glyph, layout, radius};
-use crate::ui::{Have, MainView, Screen, Sort, banner, category_icon, category_name, needed_button, short_count};
-use crate::widgets::{body, caption, chip, display, icon, segmented, title};
+use crate::ui::{Have, MainView, Screen, Sort, View, Work, banner, category_icon, category_name, needed_button, short_count};
+use crate::widgets::{
+    Kind as Button, body, button, caption, card, display, filters, icon, icon_label_button, icon_segmented, segmented, status, title,
+};
 use gpui::prelude::FluentBuilder;
 use gpui::{
     AnyElement, Context, Div, InteractiveElement, IntoElement, ParentElement, SharedString, StatefulInteractiveElement, Styled, Window,
@@ -12,104 +15,170 @@ use gpui::{
 use sporeone_core::catalog::{Category, Entry, Kind, Status};
 use sporeone_core::i18n::{Text, fill};
 
-const TILE_MIN_W: f32 = 264.;
-const TILE_H: f32 = 236.;
+const TILE_MIN_W: f32 = 256.;
+const TILE_H: f32 = 200.;
 const GAP: f32 = 16.;
 
-/// The chip a tile shows in its corner, if any: installed, an update, or how it is installed.
-pub fn state_chip(view: &MainView, e: &Entry, t: &Theme, text: &Text) -> Option<Div> {
-    let tinted = |s: &'static str, fg, bg| Some(chip(s, fg, bg));
-    match view.have(e) {
-        Have::Outdated(_) => tinted(text.chip_update, t.on_accent, t.accent),
-        Have::Installed(_) | Have::External => tinted(text.chip_installed, t.accent, t.accent_soft),
+/// A word on where a mod stands, if there is one to say: installed, an update, or why it is
+/// different from the rest.
+pub fn state_of(view: &MainView, e: &Entry, t: &Theme, text: &Text) -> Option<Div> {
+    Some(match view.have(e) {
+        Have::Outdated(_) => status(text.chip_update, t.accent, t.text),
+        Have::Installed(_) | Have::External => status(text.chip_installed, t.success, t.text2),
         Have::Not => match (e.kind, e.status) {
-            (_, Status::Broken) => tinted(text.chip_broken, t.critical, t.control),
-            (Kind::Page, _) => tinted(text.chip_elsewhere, t.text2, t.control),
-            (Kind::Setup, _) => tinted(text.chip_setup, t.text2, t.control),
-            (_, Status::Experimental) => tinted(text.chip_experimental, t.caution, t.caution_layer),
-            _ => None,
+            (_, Status::Broken) => status(text.chip_broken, t.critical, t.critical),
+            (Kind::Page, _) => status(text.chip_elsewhere, t.text3, t.text3),
+            (Kind::Setup, _) => status(text.chip_setup, t.text3, t.text3),
+            (_, Status::Experimental) => status(text.chip_experimental, t.caution, t.caution),
+            _ if view.custom_ids.contains(&e.id) => status(text.added_by_you, t.text3, t.text3),
+            _ => return None,
         },
-    }
+    })
 }
 
 impl MainView {
+    /// What a row offers to do without opening the mod's page: install or update it. A mod with
+    /// options, one installed elsewhere, or one that cannot go in now opens its page instead.
+    fn row_action(&self, e: &Entry, cx: &mut Context<Self>) -> AnyElement {
+        let t = self.theme;
+        let text = self.text;
+        let id = e.id.clone();
+        if let Some(work) = self.busy.get(&e.id) {
+            let label = match work {
+                Work::Install => text.working_install,
+                Work::Uninstall => text.working_uninstall,
+                Work::Setup => text.working_setup,
+            };
+            return button(("row-busy", hash(&id)), label, Button::Standard, &t).opacity(0.6).cursor_default().into_any_element();
+        }
+        let options = e.info.as_ref().is_some_and(|i| i.has_choices());
+        let direct = e.installable() && !options && self.setup_problem().is_none();
+        let (label, kind) = match self.have(e) {
+            Have::Outdated(_) => (text.update, Button::Primary),
+            Have::Installed(_) | Have::External => return div().into_any_element(),
+            Have::Not if direct => (text.install, Button::Standard),
+            Have::Not => return div().into_any_element(),
+        };
+        let direct = direct || kind == Button::Primary;
+        button(("row-action", hash(&id)), label, kind, &t)
+            .on_click(cx.listener(move |this, _, _, cx| {
+                cx.stop_propagation();
+                if direct {
+                    this.install(&id, cx);
+                } else {
+                    this.go(Screen::Mod(id.clone()), cx);
+                }
+            }))
+            .into_any_element()
+    }
+
+    fn list_row(&self, i: usize, e: &Entry, cx: &mut Context<Self>) -> AnyElement {
+        let t = self.theme;
+        let text = self.text;
+        let id = e.id.clone();
+        let faded = matches!(e.status, Status::Old | Status::Broken);
+        let byline =
+            if e.description.is_empty() { fill(text.by, &e.author) } else { format!("{} · {}", fill(text.by, &e.author), e.description) };
+        let downloads = if e.downloads() > 0 { short_count(e.downloads()) } else { String::new() };
+        let hover = t.layer_hover;
+        crate::widgets::row(&t)
+            .id(("mod-row", i))
+            .gap(px(20.))
+            .py(px(14.))
+            .cursor_pointer()
+            .hover(move |s| s.bg(hover))
+            .on_click(cx.listener(move |this, _, _, cx| this.go(Screen::Mod(id.clone()), cx)))
+            .child(
+                div()
+                    .flex()
+                    .flex_col()
+                    .gap(px(2.))
+                    .flex_1()
+                    .min_w(px(0.))
+                    .child(
+                        div()
+                            .flex()
+                            .items_center()
+                            .gap(px(12.))
+                            .min_w(px(0.))
+                            .child(title(e.name.clone(), if faded { t.text2 } else { t.text }).truncate())
+                            .children(state_of(self, e, &t, text)),
+                    )
+                    .child(caption(byline, t.text2).truncate()),
+            )
+            .child(caption(category_name(e.category, text), t.text3).w(px(120.)).flex_none().truncate())
+            .child(
+                div()
+                    .flex()
+                    .flex_none()
+                    .items_center()
+                    .justify_end()
+                    .gap(px(6.))
+                    .w(px(64.))
+                    .when(!downloads.is_empty(), |d| d.child(icon(glyph::DOWNLOAD, 14., t.text3)).child(caption(downloads, t.text2))),
+            )
+            .child(caption(e.version_text().unwrap_or_default(), t.text3).w(px(72.)).flex_none().text_right().truncate())
+            .child(div().flex().flex_none().justify_end().w(px(104.)).child(self.row_action(e, cx)))
+            .into_any_element()
+    }
+
     fn tile(&self, i: usize, e: &Entry, width: f32, cx: &mut Context<Self>) -> AnyElement {
         let t = self.theme;
         let text = self.text;
         let id = e.id.clone();
         let faded = matches!(e.status, Status::Old | Status::Broken);
-        let stage = crate::widgets::stage(&t)
-            .relative()
-            .flex()
-            .flex_none()
-            .items_center()
-            .justify_center()
-            .h(px(88.))
-            .rounded_t(px(radius::TILE))
-            .child(
-                div()
-                    .flex()
-                    .items_center()
-                    .justify_center()
-                    .size(px(48.))
-                    .rounded_full()
-                    .bg(t.layer.opacity(0.7))
-                    .border_1()
-                    .border_color(t.stroke)
-                    .child(icon(category_icon(e.category), 22., if faded { t.text3 } else { t.accent })),
-            )
-            .children(state_chip(self, e, &t, text).map(|c| div().absolute().top(px(12.)).right(px(12.)).child(c)));
         let mut facts = vec![];
         if e.downloads() > 0 {
             facts.push(
                 div()
                     .flex()
                     .items_center()
-                    .gap(px(4.))
-                    .child(icon(glyph::DOWNLOAD, 12., t.text3))
-                    .child(caption(short_count(e.downloads()), t.text3)),
+                    .gap(px(6.))
+                    .child(icon(glyph::DOWNLOAD, 14., t.text3))
+                    .child(caption(short_count(e.downloads()), t.text2)),
             );
         }
         if e.stars > 0 {
             facts.push(
-                div().flex().items_center().gap(px(4.)).child(icon(glyph::STAR, 12., t.text3)).child(caption(e.stars.to_string(), t.text3)),
+                div().flex().items_center().gap(px(6.)).child(icon(glyph::STAR, 14., t.text3)).child(caption(e.stars.to_string(), t.text2)),
             );
         }
-        let year = e.release.as_ref().map(|r| r.published.as_str()).filter(|p| !p.is_empty()).unwrap_or(&e.updated);
-        let version = e.version_text().unwrap_or_default();
-        div()
+        let hover = (t.layer_hover, t.stroke_strong);
+        card(&t)
             .id(("tile", i))
             .flex()
             .flex_col()
             .flex_none()
+            .gap(px(4.))
             .w(px(width))
             .h(px(TILE_H))
+            .p(px(20.))
             .overflow_hidden()
-            .rounded(px(radius::TILE))
-            .bg(t.layer)
-            .border_1()
-            .border_color(t.stroke)
             .cursor_pointer()
-            .hover(move |s| s.bg(t.layer_hover).border_color(t.stroke_strong))
+            .hover(move |s| s.bg(hover.0).border_color(hover.1))
             .on_click(cx.listener(move |this, _, _, cx| this.go(Screen::Mod(id.clone()), cx)))
-            .child(stage)
             .child(
                 div()
                     .flex()
-                    .flex_col()
-                    .flex_1()
-                    .min_h(px(0.))
-                    .gap(px(4.))
-                    .px(px(16.))
-                    .pt(px(12.))
-                    .pb(px(14.))
-                    .child(title(e.name.clone(), if faded { t.text2 } else { t.text }).truncate())
-                    .child(caption(format!("{} · {}", fill(text.by, &e.author), category_name(e.category, text)), t.text3).truncate())
-                    .child(caption(e.description.clone(), t.text2).line_clamp(2).pt(px(2.)))
+                    .items_center()
+                    .h(px(24.))
+                    .mb(px(8.))
+                    .child(icon(category_icon(e.category), 20., t.text3))
                     .child(div().flex_1())
-                    .child(div().flex().items_center().gap(px(12.)).children(facts).child(div().flex_1()).child(
-                        caption(if version.is_empty() { year.get(..4).unwrap_or("").to_string() } else { version }, t.text3).truncate(),
-                    )),
+                    .children(state_of(self, e, &t, text)),
+            )
+            .child(title(e.name.clone(), if faded { t.text2 } else { t.text }).truncate())
+            .child(caption(fill(text.by, &e.author), t.text3).truncate())
+            .child(caption(e.description.clone(), t.text2).line_clamp(2).pt(px(4.)))
+            .child(div().flex_1())
+            .child(
+                div()
+                    .flex()
+                    .items_center()
+                    .gap(px(16.))
+                    .children(facts)
+                    .child(div().flex_1())
+                    .child(caption(e.version_text().unwrap_or_default(), t.text3).truncate()),
             )
             .into_any_element()
     }
@@ -131,26 +200,26 @@ impl MainView {
         list
     }
 
-    fn empty(&self) -> AnyElement {
+    fn empty(&self, cx: &mut Context<Self>) -> AnyElement {
         let t = self.theme;
         div()
             .flex()
             .flex_col()
             .items_center()
-            .gap(px(12.))
-            .py(px(56.))
+            .gap(px(8.))
+            .py(px(64.))
             .px(px(24.))
-            .rounded(px(radius::TILE))
+            .rounded(px(radius::PANEL))
             .border_1()
             .border_dashed()
             .border_color(t.stroke_strong)
-            .child(div().flex().items_center().justify_center().size(px(56.)).rounded_full().bg(t.control).child(icon(
-                glyph::SEARCH,
-                24.,
-                t.text2,
-            )))
             .child(title(self.text.nothing_found, t.text))
             .child(body(self.text.nothing_found_body, t.text2))
+            .child(
+                icon_label_button("empty-add", glyph::ADD, self.text.add_mod, Button::Standard, &t)
+                    .mt(px(12.))
+                    .on_click(cx.listener(|this, _, window, cx| this.open_adding(window, cx))),
+            )
             .into_any_element()
     }
 
@@ -165,7 +234,7 @@ impl MainView {
                 .filter(|c| self.catalog.mods.iter().any(|e| e.category == **c))
                 .map(|c| (Some(*c), category_name(*c, text).into())),
         );
-        let categories = segmented("category", cats, self.category, &t, cx, |this, c, cx| {
+        let categories = filters("category", cats, self.category, &t, cx, |this, c, cx| {
             this.category = c;
             cx.notify();
         });
@@ -180,50 +249,66 @@ impl MainView {
                 cx.notify();
             },
         );
+        let views = icon_segmented(
+            "view",
+            vec![(View::List, glyph::LIST, text.view_list), (View::Grid, glyph::GRID, text.view_grid)],
+            self.view,
+            &t,
+            cx,
+            |this, v, cx| this.set_view(v, cx),
+        );
         let shown = self.shown();
         let count = fill(text.mods_count, shown.len());
-        // As many columns as fit, the tiles stretched to fill the row.
-        let width = (crate::frame::inner_width(window) - 2. * layout::GUTTER).min(layout::MAX_W - 2. * layout::GUTTER);
-        let cols = ((width + GAP) / (TILE_MIN_W + GAP)).floor().max(1.);
-        let tile_w = ((width - GAP * (cols - 1.)) / cols).floor();
         let entries: Vec<Entry> = shown.into_iter().cloned().collect();
-        let mut grid = div().flex().flex_wrap().gap(px(GAP));
-        for (i, e) in entries.iter().enumerate() {
-            grid = grid.child(self.tile(i, e, tile_w, cx));
-        }
-        let search = div()
-            .flex()
-            .items_center()
-            .gap(px(8.))
-            .w(px(300.))
-            .child(icon(glyph::SEARCH, 16., t.text3))
-            .child(div().flex_1().child(self.search.clone()));
+        let mods = if entries.is_empty() {
+            self.empty(cx)
+        } else if self.view == View::List {
+            let mut list = crate::widgets::group(&t);
+            for (i, e) in entries.iter().enumerate() {
+                list = list.child(self.list_row(i, e, cx));
+            }
+            list.into_any_element()
+        } else {
+            // As many columns as fit, the tiles stretched to fill the row.
+            let width = (crate::frame::inner_width(window) - 2. * layout::GUTTER).min(layout::MAX_W - 2. * layout::GUTTER);
+            let cols = ((width + GAP) / (TILE_MIN_W + GAP)).floor().max(1.);
+            let tile_w = ((width - GAP * (cols - 1.)) / cols).floor();
+            let mut grid = div().flex().flex_wrap().gap(px(GAP));
+            for (i, e) in entries.iter().enumerate() {
+                grid = grid.child(self.tile(i, e, tile_w, cx));
+            }
+            grid.into_any_element()
+        };
+        let search = div().flex_1().min_w(px(200.)).max_w(px(420.)).child(self.search.clone());
+        let add = icon_label_button("add-mod", glyph::ADD, text.add_mod, Button::Standard, &t)
+            .on_click(cx.listener(|this, _, window, cx| this.open_adding(window, cx)));
         div()
             .flex()
             .flex_col()
             .child(
                 div()
                     .flex()
-                    .items_center()
-                    .gap(px(16.))
-                    .pb(px(20.))
-                    .child(
-                        div()
-                            .flex()
-                            .items_end()
-                            .gap(px(12.))
-                            .flex_1()
-                            .min_w(px(0.))
-                            .child(display(text.catalog, t.text))
-                            .child(caption(count, t.text3).pb(px(6.))),
-                    )
-                    .child(search),
+                    .items_end()
+                    .gap(px(12.))
+                    .pb(px(24.))
+                    .child(display(text.catalog, t.text))
+                    .child(caption(count, t.text3).pb(px(8.)))
+                    .child(div().flex_1())
+                    .child(add),
             )
             .children(banner)
-            .child(div().flex().flex_wrap().items_center().justify_between().gap(px(12.)).pb(px(20.)).child(categories).child(sorts))
-            .when(entries.is_empty(), |d| d.child(self.empty()))
-            .when(!entries.is_empty(), |d| d.child(grid))
+            .child(div().flex().items_center().gap(px(12.)).pb(px(16.)).child(search).child(div().flex_1()).child(sorts).child(views))
+            .child(div().pb(px(24.)).child(categories))
+            .child(mods)
             .child(caption(text.drop_hint, t.text3).pt(px(24.)))
             .into_any_element()
     }
+}
+
+/// An element id from a catalog id.
+fn hash(id: &str) -> usize {
+    use std::hash::{Hash, Hasher};
+    let mut h = std::collections::hash_map::DefaultHasher::new();
+    id.hash(&mut h);
+    h.finish() as usize
 }

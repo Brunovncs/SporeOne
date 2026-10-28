@@ -2,88 +2,62 @@
 
 <img src="assets/icon-256.png" width="96" align="right" alt="">
 
-A mod manager for Spore on Windows. It lists the community's mods in one catalog, installs any of
-them in one click with whatever else it needs, keeps them up to date, and starts the game with
-them. It does not replace the Spore ModAPI Launcher Kit: it installs mods into it, the same way its
-Easy Installer does, so the Launcher Kit's Easy Uninstaller shows the same mods and either program
-can remove what the other installed.
+A mod manager for Spore on Windows. It installs mods into the Spore ModAPI Launcher Kit the same
+way its Easy Installer does, so both programs see the same mods.
 
-SporeOne is open source (MIT) and new, at version 0.0.1. It is not made by EA or Maxis, and it does
-not check the mods it lists: they are their authors' work.
+![SporeOne's catalog: a list of Spore mods with their category, author, downloads and version](docs/catalog.png)
 
-![SporeOne's catalog: mods as tiles with their category, author, downloads and version, one marked Installed and one with an update](docs/catalog.png)
+SporeOne shows the community's mods as a list or a grid. Before it installs one, it checks that
+the mod fits your game and Launcher Kit, and it installs what the mod depends on first, in order.
+It keeps mods up to date and updates itself from its own releases. You can also add a mod that is
+not in the catalog, from a GitHub link or by dropping its file on the window, and suggest one for
+the catalog with a button.
 
-## Installing
+Version 0.0.2. SporeOne is not made by EA or Maxis, and the mods it lists are their authors' work.
 
-The [latest release](https://github.com/Brunovncs/SporeOne/releases/latest) has
-`sporeone-0.0.1-windows-x64-setup.exe`, which installs SporeOne for your user without
-administrator rights, and `sporeone-0.0.1-windows-x64.zip` with the program alone. Each comes with
-its SHA-256. The program is not signed, so Windows SmartScreen warns the first time it starts.
+## Install
 
-## What you need
+Download the setup or the zip from the [latest release](https://github.com/Brunovncs/SporeOne/releases/latest).
+The setup installs for your user and needs no administrator rights. The program is not signed yet,
+so Windows SmartScreen warns the first time you run it.
 
-Windows 10 or 11, Spore with Galactic Adventures from Steam, GOG, the EA app or the disc, and the
-Launcher Kit. If the Launcher Kit is missing, SporeOne downloads its setup from its GitHub release
-and starts it. A Steam copy has to be started once from Steam before mods can go in, so that it
-tells Windows where it is.
+## Requirements
 
-## Where the mods come from
+Windows 10 or 11, and Spore with Galactic Adventures from Steam, GOG, the EA app or the disc. You
+also need the Launcher Kit, which SporeOne can install for you. A Steam copy has to be started once
+from Steam before mods can go in.
 
-Most current Spore mods are published on GitHub, in a repository tagged `spore-mod` with a
-`ModInfo.xml` and its `.sporemod` or `.package` attached to a release. That is what the
-[Spore Mod Browser](https://mods.sporecommunity.com) lists, and SporeOne reads the same
-repositories. A workflow in this repository builds the catalog from them every six hours, downloads
-each file once to record its SHA-256, and publishes it on the `catalog` branch; SporeOne downloads
-that file when it opens, and carries a copy from its own release for when it is offline. A
-download that does not match its hash is not installed.
+## The catalog
 
-`catalog/curated.json`, kept by hand, adds what GitHub cannot say: older mods published on other
-sites, mods that come with their own installer, which store's copy a mod needs, and notes. Mods
-from Nexus Mods, ModDB or Davo's forum are listed with a link to their page, since those sites need
-an account or a browser to download; the file downloaded there can be dropped on SporeOne's window
-to install it.
+A workflow in this repository builds the catalog every six hours. It takes every GitHub repository
+with the `spore-mod` topic, which is what the [Spore Mod Browser](https://mods.sporecommunity.com)
+reads, plus the suggestions a maintainer approved. Then it applies `catalog/curated.json`, kept by
+hand for mods on other sites, mods with their own installer and compatibility notes. Each file is
+downloaded once to record its SHA-256, and SporeOne refuses a download that does not match.
 
-To get a mod into the catalog, publish it the way the Mod Browser asks (the `spore-mod` topic, a
-`ModInfo.xml` at the root of the repository, the file on a release) and it shows up on the next
-build. Corrections to the curated list are welcome as pull requests.
+## Getting a mod listed
 
-## Before installing a mod
-
-A mod's page says whether it will work on this computer, before anything is downloaded:
-
-- the game: whether Galactic Adventures is installed, and whether the build of `SporeApp.exe` is one
-  the Launcher Kit supports (disc with patch 5.1, March 2017 or October 2024 from Steam, GOG or the
-  EA app), told apart by its size as the Launcher Kit does;
-- the Launcher Kit, and whether its ModAPI DLLs are as new as the mod's `dllsBuild`;
-- the mods it depends on (`depends` in `ModInfo.xml`), which are installed with it when the catalog
-  has them, in order;
-- what its author flags: experimental, needs a galaxy reset, saved games depend on it;
-- installed mods whose files it would replace, and mods it is known not to work with;
-- SporeModLoader, which the Launcher Kit will not start the game next to.
-
-Mods with options (a custom installer in `ModInfo.xml`) show them on their page, and the choices
-are kept where the Launcher Kit keeps them. Uninstalling a mod that others need says so first.
+Publish it on GitHub with the `spore-mod` topic, a `ModInfo.xml` at the root of the repository and
+the `.sporemod` or `.package` on a release. It shows up on the next build. For a mod someone else
+made, or one published elsewhere, open a
+[Suggest a mod](https://github.com/Brunovncs/SporeOne/issues/new?template=suggest-mod.yml) issue.
+Fixes to the curated list are welcome as pull requests.
 
 ## Multiplayer
 
-[SporeCoop](https://github.com/WoodyWizard/SporeCoop) is a co-op mod for two to four players that
-aims to cover every stage. It is new and experimental. It has an installer of its own and does not go through the Launcher
-Kit, so SporeOne downloads that installer and starts it, and tells from the game's folder whether
-it is in. It works with the Steam and GOG copies only.
+[SporeCoop](https://github.com/WoodyWizard/SporeCoop) adds co-op for two to four players. It is
+experimental and has its own installer, which SporeOne downloads and runs. It works with the Steam
+and GOG copies only.
 
-## Installing into the game's folder
+## Safety
 
-The game is usually in Program Files. Each install is worked out as a plan first: the files to copy
-and delete, and the Launcher Kit's list written last. When the folders need administrator rights,
-SporeOne starts itself again with them only to carry that plan out, after checking that every path
-is inside the game's data folders or the Launcher Kit's folder. No plan can delete or replace a file
-named like the game's own (`Spore_*.package`, `EP1_*` and the like), even when a mod's
-`ModInfo.xml` asks for it.
+Every install is worked out as a plan first, and each path in it is checked to be inside the game's
+data folders or the Launcher Kit. No plan touches the game's own files. When the game folder needs
+administrator rights, SporeOne asks for them only to carry out a plan it has already checked.
 
 ## Building
 
-SporeOne is written in Rust with [GPUI](https://www.gpui.rs), and looks like
-[OpenController](https://github.com/Brunovncs/OpenController).
+SporeOne is written in Rust with [GPUI](https://www.gpui.rs).
 
 ```
 cargo build --release
@@ -91,14 +65,9 @@ cargo test --workspace
 cargo run -- --demo
 ```
 
-`--demo` shows a made-up game and Launcher Kit in a temporary folder, with a few mods in, so the
-window can be tried without Spore; installing from it is real, into that folder.
-`cargo test -p sporeone-core --test real_mods -- --ignored` downloads popular mods from the catalog
-and installs and removes them there. `sporeone-catalog` builds the catalog
-(`GITHUB_TOKEN` or `GH_TOKEN` set, since GitHub allows few requests without one).
-
-`.\scripts\screenshot.ps1` takes the README's pictures. A tag `vX.Y.Z` matching the version in
-`Cargo.toml`, with its section in `CHANGELOG.md`, builds and publishes the release.
+`--demo` runs against a fake game and Launcher Kit in a temporary folder, so you can try it without
+Spore. `cargo run -p sporeone-catalog` builds the catalog and wants a token in `GITHUB_TOKEN` or
+`GH_TOKEN`.
 
 ## License
 
