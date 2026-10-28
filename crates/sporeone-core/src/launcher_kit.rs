@@ -26,13 +26,22 @@ pub fn appdata() -> Option<PathBuf> {
     std::env::var_os("APPDATA").map(|a| PathBuf::from(a).join("Spore ModAPI Launcher"))
 }
 
+/// Where its setup puts it unless told otherwise. `path.info` is only written once the launcher
+/// has run, so a Launcher Kit just installed is found here.
+fn default_dirs() -> Vec<PathBuf> {
+    ["ProgramData", "ProgramFiles(x86)", "ProgramFiles"]
+        .iter()
+        .filter_map(std::env::var_os)
+        .map(|base| PathBuf::from(base).join("SPORE ModAPI Launcher Kit"))
+        .collect()
+}
+
 pub fn find() -> Option<LauncherKit> {
     if let Some(dir) = std::env::var_os("SPOREONE_LK_DIR") {
         return Some(LauncherKit::at(Path::new(&dir)));
     }
-    let noted = std::fs::read_to_string(appdata()?.join("path.info")).ok()?;
-    let dir = PathBuf::from(noted.trim());
-    dir.join(LAUNCHER_EXE).is_file().then(|| LauncherKit::at(&dir))
+    let noted = appdata().and_then(|a| std::fs::read_to_string(a.join("path.info")).ok()).map(|s| PathBuf::from(s.trim()));
+    noted.into_iter().chain(default_dirs()).find(|dir| dir.join(LAUNCHER_EXE).is_file()).map(|dir| LauncherKit::at(&dir))
 }
 
 impl LauncherKit {

@@ -201,8 +201,8 @@ fn steam_roots() -> Vec<PathBuf> {
 #[cfg(windows)]
 fn gog_roots() -> Vec<PathBuf> {
     use crate::win::{Hive, reg_string};
-    // Galactic Adventures' and Spore's GOG ids.
-    ["1207659142", "1207659141"]
+    // Galactic Adventures', Spore's and the SPORE Collection's GOG ids.
+    ["1207659142", "1207659141", "1948823323"]
         .iter()
         .filter_map(|id| reg_string(Hive::Machine, &format!(r"SOFTWARE\GOG.com\Games\{id}"), "path"))
         .map(PathBuf::from)

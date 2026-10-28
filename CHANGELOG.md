@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.3
+
+Finds a Launcher Kit that was just installed, before its launcher has been opened once, and the
+GOG copy of the SPORE Collection.
+
 ## 0.0.2
 
 A cleaner window. The catalog is a list by default, with mods installed or updated from their row,
