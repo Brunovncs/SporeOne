@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.0.1
 
 The first version. A catalog of 140 Spore mods built from the GitHub repositories tagged
 `spore-mod` and a list kept by hand, each installed in one click into the Launcher Kit, with the

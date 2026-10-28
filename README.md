@@ -8,10 +8,17 @@ them. It does not replace the Spore ModAPI Launcher Kit: it installs mods into i
 Easy Installer does, so the Launcher Kit's Easy Uninstaller shows the same mods and either program
 can remove what the other installed.
 
-SporeOne is open source (MIT) and new, at version 0.1.0. It is not made by EA or Maxis, and it does
+SporeOne is open source (MIT) and new, at version 0.0.1. It is not made by EA or Maxis, and it does
 not check the mods it lists: they are their authors' work.
 
 ![SporeOne's catalog: mods as tiles with their category, author, downloads and version, one marked Installed and one with an update](docs/catalog.png)
+
+## Installing
+
+The [latest release](https://github.com/Brunovncs/SporeOne/releases/latest) has
+`sporeone-0.0.1-windows-x64-setup.exe`, which installs SporeOne for your user without
+administrator rights, and `sporeone-0.0.1-windows-x64.zip` with the program alone. Each comes with
+its SHA-256. The program is not signed, so Windows SmartScreen warns the first time it starts.
 
 ## What you need
 
@@ -90,7 +97,8 @@ window can be tried without Spore; installing from it is real, into that folder.
 and installs and removes them there. `sporeone-catalog` builds the catalog
 (`GITHUB_TOKEN` or `GH_TOKEN` set, since GitHub allows few requests without one).
 
-There are no release builds yet.
+`.\scripts\screenshot.ps1` takes the README's pictures. A tag `vX.Y.Z` matching the version in
+`Cargo.toml`, with its section in `CHANGELOG.md`, builds and publishes the release.
 
 ## License
 

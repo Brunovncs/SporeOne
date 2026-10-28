@@ -4,7 +4,7 @@ members = ["crates/sporeone-core", "crates/sporeone", "crates/sporeone-catalog"]
 default-members = ["crates/sporeone"]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.0.1"
 edition = "2024"
 rust-version = "1.97"
 license = "MIT"
