@@ -38,6 +38,13 @@ impl MainView {
             Some(v) => format!("{} {v} · {origin}", text.version),
             None => origin.to_string(),
         };
+        let clashes: Vec<String> = entry
+            .iter()
+            .flat_map(|e| &e.overlaps)
+            .filter_map(|o| self.catalog.get(&o.id).and_then(Entry::unique))
+            .filter_map(|u| self.env.installed.mods.iter().find(|m| m.unique == u))
+            .map(|m| m.shown_name().to_string())
+            .collect();
         let category = entry.as_ref().map_or(Category::Gameplay, |e| e.category);
         let name = m.name.clone();
         let actions = if let Some(work) = self.busy.get(&key) {
@@ -85,7 +92,8 @@ impl MainView {
                             .child(strong(m.shown_name().to_string(), t.text).truncate())
                             .when(outdated, |d| d.child(status(text.chip_update, t.accent, t.text))),
                     )
-                    .child(caption(line, t.text3).truncate()),
+                    .child(caption(line, t.text3).truncate())
+                    .when(!clashes.is_empty(), |d| d.child(caption(fill(text.clashes_with, clashes.join(", ")), t.caution).truncate())),
             )
             .child(actions)
             .into_any_element()

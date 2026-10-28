@@ -158,13 +158,15 @@ fn release_of(full: &str, wanted: Option<&str>, token: Option<&str>, hash: bool)
     let Some(asset) = asset(&r, wanted) else { return Ok(None) };
     let (Some(url), Some(file)) = (asset["browser_download_url"].as_str(), asset["name"].as_str()) else { return Ok(None) };
     let size = asset["size"].as_u64().unwrap_or(0);
-    let sha256 = if hash && size <= HASH_LIMIT {
+    let (sha256, resources) = if hash && size <= HASH_LIMIT {
         let dir = std::env::temp_dir().join("sporeone-github").join(full.replace('/', "_"));
-        let got = net::download(url, &dir, file, None).ok().and_then(|f| net::file_sha256(&f));
+        let got = net::download(url, &dir, file, None).ok();
+        let sum = got.as_deref().and_then(net::file_sha256);
+        let resources = got.as_deref().and_then(|f| crate::dbpf::resources_of_mod(f).ok()).unwrap_or_default();
         let _ = std::fs::remove_dir_all(&dir);
-        got
+        (sum, resources)
     } else {
-        None
+        (None, Vec::new())
     };
     Ok(Some(Release {
         tag: r["tag_name"].as_str().unwrap_or("").to_string(),
@@ -174,6 +176,7 @@ fn release_of(full: &str, wanted: Option<&str>, token: Option<&str>, hash: bool)
         size,
         downloads: asset["download_count"].as_u64().unwrap_or(0),
         sha256,
+        resources,
     }))
 }
 

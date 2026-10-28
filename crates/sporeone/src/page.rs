@@ -1,8 +1,9 @@
 //! A mod's page: what it is, its options, what to know before installing it on this game, and
 //! the button that installs, updates or removes it.
 
+use crate::markdown;
 use crate::theme::{Theme, icon as glyph, radius};
-use crate::ui::{Have, MainView, Screen, Work, category_name, date, issue_text, short_count, size_text};
+use crate::ui::{Have, MainView, ReadmeState, Screen, Work, category_name, date, issue_text, short_count, size_text};
 use crate::widgets::{Kind as Button, body, button, caption, card, check_box, display, icon, icon_label_button, radio, strong, title};
 use gpui::prelude::FluentBuilder;
 use gpui::{AnyElement, Context, Div, InteractiveElement, IntoElement, ParentElement, StatefulInteractiveElement, Styled, Window, div, px};
@@ -11,6 +12,8 @@ use sporeone_core::compat::{self, Issue};
 use sporeone_core::i18n::{Lang, fill};
 use sporeone_core::install::{self, Choices};
 use sporeone_core::modinfo::Item;
+use sporeone_core::readme;
+use std::sync::Arc;
 
 fn section(t: &Theme, heading: &'static str) -> Div {
     div().flex().flex_col().gap(px(12.)).child(title(heading, t.text))
@@ -29,6 +32,44 @@ impl MainView {
         }
         let saved = self.env.lk.as_ref().and_then(|lk| install::saved_choices(&lk.dir, &info.unique));
         Some(saved.unwrap_or_else(|| install::default_choices(info)))
+    }
+
+    /// Starts fetching a GitHub mod's README the first time its page opens. `--demo` stays off
+    /// the network and shows the copy kept from an earlier run, if there is one.
+    fn want_readme(&mut self, e: &Entry, cx: &mut Context<Self>) {
+        if !e.page.contains("github.com") || !e.id.contains('/') || self.readmes.contains_key(&e.id) {
+            return;
+        }
+        self.readmes.insert(e.id.clone(), ReadmeState::Loading);
+        let (id, name, demo) = (e.id.clone(), e.name.clone(), self.demo);
+        cx.spawn(async move |this, cx| {
+            let repo = id.clone();
+            let doc = cx
+                .background_executor()
+                .spawn(async move {
+                    let text = if demo { readme::cached(&repo) } else { readme::fetch(&repo).ok() }?;
+                    let mut doc = markdown::parse(&text, &repo);
+                    markdown::drop_title(&mut doc, &[&name, repo.rsplit('/').next().unwrap_or_default()]);
+                    (!doc.is_empty()).then_some(doc)
+                })
+                .await;
+            let _ = this.update(cx, |this, cx| {
+                this.readmes.insert(id, doc.map_or(ReadmeState::Failed, |d| ReadmeState::Loaded(Arc::new(d))));
+                cx.notify();
+            });
+        })
+        .detach();
+    }
+
+    /// The README when it has come, or else the catalog's one line.
+    fn about(&self, e: &Entry) -> Option<AnyElement> {
+        let t = self.theme;
+        let content = match self.readmes.get(&e.id) {
+            Some(ReadmeState::Loaded(doc)) => markdown::render(doc, &t).into_any_element(),
+            _ if e.description.is_empty() => return None,
+            _ => body(e.description.clone(), t.text2).into_any_element(),
+        };
+        Some(section(&t, self.text.about_mod).child(content).into_any_element())
     }
 
     fn pick(&mut self, e: &Entry, key: String, value: String, cx: &mut Context<Self>) {
@@ -245,6 +286,7 @@ impl MainView {
     pub fn render_page(&mut self, e: &Entry, _: &mut Window, cx: &mut Context<Self>) -> AnyElement {
         let t = self.theme;
         let text = self.text;
+        self.want_readme(e, cx);
         let issues = compat::check(e, &self.catalog, &self.env);
         let blocked = issues.iter().any(Issue::blocks) && e.kind != Kind::Page;
         let back = icon_label_button("back", glyph::BACK, text.catalog, Button::Subtle, &t)
@@ -267,7 +309,7 @@ impl MainView {
             .gap(px(32.))
             .flex_1()
             .min_w(px(0.))
-            .when(!e.description.is_empty(), |d| d.child(section(&t, text.about_mod).child(body(e.description.clone(), t.text2))))
+            .children(self.about(e))
             .children(self.options(e, cx))
             .when(!notes.is_empty(), |d| {
                 let mut s = section(&t, text.notes);

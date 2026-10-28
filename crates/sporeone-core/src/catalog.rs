@@ -98,6 +98,10 @@ pub struct Release {
     /// Filled in by the catalog's builder, which downloads every file once.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sha256: Option<String>,
+    /// The game resources its packages carry, read by the builder along with the hash and only
+    /// used to work out `Entry::overlaps`.
+    #[serde(skip)]
+    pub resources: Vec<crate::dbpf::Resource>,
 }
 
 /// What a mod needs to run, beyond what its `ModInfo.xml` says.
@@ -143,6 +147,10 @@ pub struct Entry {
     /// Catalog ids or unique names of mods it does not work with.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub conflicts: Vec<String>,
+    /// Catalog mods whose packages replace some of the same game resources, and how many: with
+    /// both installed, only one of them gets its way there.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub overlaps: Vec<Overlap>,
     /// Notes from the curated list, in English and Portuguese.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub notes: Vec<Note>,
@@ -153,6 +161,48 @@ pub struct Entry {
     /// For a mod with its own installer: the file in its release to run.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub setup: Option<String>,
+}
+
+/// Fills in `overlaps` for every mod whose release's resources were read: the pairs of mods that
+/// carry the same game resource with different bytes. A resource four or more mods carry is a
+/// convention (a file every mod of a kind ships) rather than a clash, and so is the one each
+/// package's builder adds; a mod and one it depends on are meant to go together.
+pub fn mark_overlaps(mods: &mut [Entry]) {
+    const SIGNATURE: u32 = 0x2b6c_ab5f;
+    let mut carried: std::collections::HashMap<crate::dbpf::Key, usize> = std::collections::HashMap::new();
+    for e in mods.iter() {
+        for (k, _) in e.release.iter().flat_map(|r| &r.resources) {
+            *carried.entry(*k).or_default() += 1;
+        }
+    }
+    let own: Vec<Vec<crate::dbpf::Resource>> = mods
+        .iter()
+        .map(|e| {
+            let all = e.release.iter().flat_map(|r| &r.resources);
+            all.filter(|(k, _)| k.0 != SIGNATURE && carried[k] < 4).copied().collect()
+        })
+        .collect();
+    let needs = |a: &Entry, b: &Entry| {
+        let depends = |x: &Entry, y: &Entry| x.info.as_ref().zip(y.unique()).is_some_and(|(i, u)| i.depends.iter().any(|d| d.unique == u));
+        depends(a, b) || depends(b, a) || (a.unique().is_some() && a.unique() == b.unique())
+    };
+    for i in 0..mods.len() {
+        for j in i + 1..mods.len() {
+            let n = crate::dbpf::clashes(&own[i], &own[j]);
+            if n == 0 || needs(&mods[i], &mods[j]) {
+                continue;
+            }
+            let (a, b) = (mods[i].id.clone(), mods[j].id.clone());
+            mods[i].overlaps.push(Overlap { id: b, resources: n });
+            mods[j].overlaps.push(Overlap { id: a, resources: n });
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Overlap {
+    pub id: String,
+    pub resources: usize,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]

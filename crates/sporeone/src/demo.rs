@@ -23,6 +23,7 @@ const CURRENT: &str = "emd4600/EnhancedColorPickerMod";
 /// Makes the folder and points SporeOne at it.
 pub fn sandbox() {
     let root = root();
+    let readmes = sporeone_core::state::data_dir().join("readmes");
     let _ = std::fs::remove_dir_all(&root);
     let game = root.join("Spore");
     let lk = root.join("Spore ModAPI Launcher Kit");
@@ -34,6 +35,14 @@ pub fn sandbox() {
     let _ = std::fs::write(game.join("Data/Spore_Content.package"), b"demo");
     let _ = std::fs::write(game.join("DataEP1/Spore_EP1_Data.package"), b"demo");
     let _ = std::fs::write(lk.join(sporeone_core::launcher_kit::LAUNCHER_EXE), b"MZ");
+    // The READMEs kept by real runs, so pages show them without the network.
+    if let Ok(files) = std::fs::read_dir(&readmes) {
+        let kept = root.join("data").join("readmes");
+        let _ = std::fs::create_dir_all(&kept);
+        for f in files.flatten() {
+            let _ = std::fs::copy(f.path(), kept.join(f.file_name()));
+        }
+    }
     let catalog = Catalog::built_in();
     let mut list = InstalledMods::default();
     for (id, behind) in [(BEHIND, true), (CURRENT, false)] {

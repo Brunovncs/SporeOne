@@ -9,6 +9,7 @@ mod frame;
 mod home;
 mod icons;
 mod library;
+mod markdown;
 mod page;
 mod settings;
 mod text_field;

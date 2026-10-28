@@ -81,6 +81,14 @@ pub enum Work {
     Setup,
 }
 
+/// A GitHub mod's README, for its page.
+pub enum ReadmeState {
+    Loading,
+    Loaded(Arc<Vec<crate::markdown::Block>>),
+    /// Not reachable, not there, or nothing in it to show: the page keeps the short description.
+    Failed,
+}
+
 pub struct Notice {
     pub ok: bool,
     pub text: String,
@@ -128,6 +136,8 @@ pub struct MainView {
     pub refreshing: bool,
     pub catalog_error: Option<String>,
     pub demo: bool,
+    /// Fetched once a session, by catalog id.
+    pub readmes: HashMap<String, ReadmeState>,
     brand: (f32, Arc<Image>),
     /// The bar on top was pressed where the window draws its own frame: moving the mouse now
     /// moves the window.
@@ -204,6 +214,7 @@ impl MainView {
             refreshing: false,
             catalog_error: None,
             demo,
+            readmes: HashMap::new(),
             brand: brand(window.scale_factor()),
             moving: false,
             _subscriptions: vec![searched, theme_change, activation],
@@ -918,6 +929,7 @@ pub fn issue_text(i: &Issue, t: &Text, catalog: &Catalog) -> String {
         Issue::Old => t.issue_old.into(),
         Issue::Conflicts(n) => fill(t.issue_conflicts, names(n)),
         Issue::Replaces(n) => fill(t.issue_replaces, names(n)),
+        Issue::Overlaps(n) => fill(t.issue_overlaps, names(n)),
         Issue::Brings(ids) => {
             let shown: Vec<String> = ids.iter().map(|id| catalog.get(id).map_or_else(|| id.clone(), |e| e.name.clone())).collect();
             fill(t.issue_brings, names(&shown))

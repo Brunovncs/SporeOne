@@ -4247,6 +4247,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "pulldown-cmark"
+version = "0.13.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "278e9268c93b9e498a2da46c34d90ba93a3255eb99009646398f34bc73ab36eb"
+dependencies = [
+ "bitflags 2.13.2",
+ "memchr",
+ "unicase",
+]
+
+[[package]]
 name = "pulp"
 version = "0.22.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5091,11 +5102,12 @@ dependencies = [
 
 [[package]]
 name = "sporeone"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "embed-resource",
  "gpui-pre",
  "gpui-pre-platform",
+ "pulldown-cmark",
  "serde_json",
  "sporeone-core",
  "unicode-segmentation",
@@ -5104,7 +5116,7 @@ dependencies = [
 
 [[package]]
 name = "sporeone-catalog"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "serde_json",
  "sporeone-core",
@@ -5112,7 +5124,7 @@ dependencies = [
 
 [[package]]
 name = "sporeone-core"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "roxmltree 0.21.2",
  "serde",
@@ -5712,6 +5724,12 @@ dependencies = [
  "tempfile",
  "windows-sys 0.61.2",
 ]
+
+[[package]]
+name = "unicase"
+version = "2.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "357cc3acc6a036009fd6c973ed009037c732d60d0b4f6c673e9041497482a28f"
 
 [[package]]
 name = "unicode-bidi"

@@ -73,6 +73,8 @@ pub enum Issue {
     Conflicts(Vec<String>),
     /// Installed mods whose files it would replace.
     Replaces(Vec<String>),
+    /// Installed mods that change some of the same game resources, by name.
+    Overlaps(Vec<String>),
     /// Mods installed with it as well, by catalog id.
     Brings(Vec<String>),
 }
@@ -254,7 +256,18 @@ pub fn check(entry: &Entry, catalog: &Catalog, env: &Env) -> Vec<Issue> {
         .map(|m| m.shown_name().to_string())
         .collect();
     if !replaces.is_empty() {
-        out.push(Issue::Replaces(replaces));
+        out.push(Issue::Replaces(replaces.clone()));
+    }
+    let overlaps: Vec<String> = env
+        .installed
+        .mods
+        .iter()
+        .filter(|m| !mine(&m.unique) && !replaces.iter().any(|r| r == m.shown_name()))
+        .filter(|m| entry.overlaps.iter().any(|o| catalog.get(&o.id).and_then(Entry::unique) == Some(&m.unique)))
+        .map(|m| m.shown_name().to_string())
+        .collect();
+    if !overlaps.is_empty() {
+        out.push(Issue::Overlaps(overlaps));
     }
     out
 }
@@ -376,6 +389,34 @@ mod tests {
         assert!(check(&replacing, &c, &e).contains(&Issue::Replaces(vec!["Other".into()])));
         e.lk = None;
         assert!(check(&base, &c, &e).contains(&Issue::NoLauncherKit));
+    }
+
+    #[test]
+    fn mods_that_change_the_same_resources() {
+        let with = |id: &str, unique: &str, depends: &[&str], resources: &[(u32, u64)]| {
+            let mut e = entry(id, unique, depends);
+            e.release.as_mut().unwrap().resources = resources.iter().map(|(i, h)| ((1, 0, *i), *h)).collect();
+            e
+        };
+        let mut catalog = Catalog {
+            generated: String::new(),
+            mods: vec![
+                with("a/faces", "Faces", &[], &[(1, 1), (2, 2)]),
+                with("b/other-faces", "OtherFaces", &[], &[(2, 9)]),
+                with("c/same-bytes", "Same", &[], &[(1, 1)]),
+                with("d/addon", "Addon", &["Faces"], &[(2, 7)]),
+            ],
+        };
+        crate::catalog::mark_overlaps(&mut catalog.mods);
+        let ids = |e: &Entry| e.overlaps.iter().map(|o| o.id.clone()).collect::<Vec<_>>();
+        assert_eq!(ids(&catalog.mods[0]), ["b/other-faces"]);
+        assert_eq!(ids(&catalog.mods[1]), ["a/faces", "d/addon"]);
+        assert!(catalog.mods[2].overlaps.is_empty());
+
+        let mut e = env();
+        e.installed.put(InstalledMod::new("OtherFaces"));
+        assert!(check(&catalog.mods[0], &catalog, &e).contains(&Issue::Overlaps(vec!["OtherFaces".into()])));
+        assert!(!check(&catalog.mods[2], &catalog, &e).iter().any(|i| matches!(i, Issue::Overlaps(_))));
     }
 
     #[test]

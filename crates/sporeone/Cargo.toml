@@ -17,6 +17,7 @@ sporeone-core.workspace = true
 # names inside are still `gpui` and `gpui_platform`. Pinned exactly: its API moves with Zed.
 gpui = { package = "gpui-pre", version = "=0.3.7" }
 gpui_platform = { package = "gpui-pre-platform", version = "=0.3.7", features = ["font-kit", "wayland", "x11"] }
+pulldown-cmark = { version = "0.13", default-features = false }
 serde_json.workspace = true
 unicode-segmentation = "1"
 

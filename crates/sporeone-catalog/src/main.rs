@@ -141,6 +141,7 @@ fn main() {
             Err(e) => eprintln!("{e}"),
         }
     }
+    sporeone_core::catalog::mark_overlaps(&mut mods);
     mods.sort_by(|a, b| b.downloads().cmp(&a.downloads()).then(b.stars.cmp(&a.stars)).then(a.name.cmp(&b.name)));
     let catalog = Catalog { generated: today(), mods };
     let text = serde_json::to_string_pretty(&catalog).unwrap_or_default() + "\n";

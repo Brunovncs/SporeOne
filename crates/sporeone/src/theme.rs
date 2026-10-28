@@ -18,6 +18,7 @@ pub fn accents_seen() -> u32 {
 
 pub const FONT: &str = "Segoe UI Variable Text";
 pub const DISPLAY_FONT: &str = "Segoe UI Variable Display";
+pub const MONO_FONT: &str = "Consolas";
 
 /// Type ramp, as (size, line height) in pixels.
 pub mod text {

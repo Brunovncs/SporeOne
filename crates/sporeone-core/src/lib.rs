@@ -5,6 +5,7 @@
 pub mod actions;
 pub mod catalog;
 pub mod compat;
+pub mod dbpf;
 pub mod game;
 pub mod github;
 pub mod i18n;
@@ -13,6 +14,7 @@ pub mod installed;
 pub mod launcher_kit;
 pub mod modinfo;
 pub mod net;
+pub mod readme;
 pub mod state;
 pub mod update;
 pub mod version;

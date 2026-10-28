@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.5
+
+A mod's page shows its full description, the README of its repository, formatted. SporeOne now
+reads what each mod's packages change in the game and warns when an installed mod changes the
+same parts with different content, on the mod's page before installing and on the Installed
+screen.
+
 ## 0.0.4
 
 The game's folder and the Launcher Kit's can be chosen by hand in the settings, for when SporeOne
