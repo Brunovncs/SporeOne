@@ -35,13 +35,14 @@ pub mod layout {
     pub const GUTTER: f32 = 32.;
 }
 
-/// Corner radii, concentric: a control is round at its ends, and what holds controls is rounder by
-/// its padding.
+/// Corner radii, concentric: what holds others is rounder by its padding.
 pub mod radius {
-    pub const SURFACE: f32 = 28.;
-    pub const PANEL: f32 = 20.;
-    pub const CONTROL: f32 = 18.;
-    pub const SMALL: f32 = 12.;
+    pub const SURFACE: f32 = 20.;
+    pub const PANEL: f32 = 16.;
+    /// A row of choices, around controls 3 pixels in.
+    pub const TRACK: f32 = 11.;
+    pub const CONTROL: f32 = 8.;
+    pub const SMALL: f32 = 8.;
 }
 
 /// The icons, by name (see `crate::icons`).

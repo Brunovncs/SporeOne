@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.4
+
+The game's folder and the Launcher Kit's can be chosen by hand in the settings, for when SporeOne
+does not find them, and changed when there are several copies. Buttons and fields have softer
+corners and more room around their text.
+
 ## 0.0.3
 
 Finds a Launcher Kit that was just installed, before its launcher has been opened once, and the

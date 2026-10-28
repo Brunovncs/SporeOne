@@ -40,8 +40,14 @@ pub fn find() -> Option<LauncherKit> {
     if let Some(dir) = std::env::var_os("SPOREONE_LK_DIR") {
         return Some(LauncherKit::at(Path::new(&dir)));
     }
+    let chosen = crate::state::State::load().lk_dir;
     let noted = appdata().and_then(|a| std::fs::read_to_string(a.join("path.info")).ok()).map(|s| PathBuf::from(s.trim()));
-    noted.into_iter().chain(default_dirs()).find(|dir| dir.join(LAUNCHER_EXE).is_file()).map(|dir| LauncherKit::at(&dir))
+    chosen.into_iter().chain(noted).chain(default_dirs()).find(|dir| is_launcher_kit(dir)).map(|dir| LauncherKit::at(&dir))
+}
+
+/// Whether `dir` holds a Launcher Kit.
+pub fn is_launcher_kit(dir: &Path) -> bool {
+    dir.join(LAUNCHER_EXE).is_file()
 }
 
 impl LauncherKit {

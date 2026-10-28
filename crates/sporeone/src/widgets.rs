@@ -144,7 +144,7 @@ fn button_base(id: impl Into<ElementId>, kind: Kind, t: &Theme) -> Stateful<Div>
         .justify_center()
         .gap(px(8.))
         .h(px(36.))
-        .px(px(16.))
+        .px(px(18.))
         .rounded(px(radius::CONTROL))
         .bg(bg)
         .border_1()
@@ -167,7 +167,7 @@ pub fn icon_button(id: impl Into<ElementId>, glyph: &'static str, t: &Theme) -> 
         .items_center()
         .justify_center()
         .size(px(36.))
-        .rounded_full()
+        .rounded(px(radius::CONTROL))
         .cursor_pointer()
         .hover(move |s| s.bg(hover))
         .child(icon(glyph, 18., t.text2))
@@ -183,7 +183,7 @@ pub fn segmented<T: Copy + PartialEq + 'static, V: 'static>(
     on_pick: impl Fn(&mut V, T, &mut Context<V>) + 'static,
 ) -> Div {
     let on_pick = std::rc::Rc::new(on_pick);
-    let mut d = div().flex().flex_none().gap(px(2.)).p(px(3.)).rounded_full().bg(t.control);
+    let mut d = div().flex().flex_none().gap(px(2.)).p(px(3.)).rounded(px(radius::TRACK)).bg(t.control);
     for (i, (value, label)) in choices.into_iter().enumerate() {
         let on = value == picked;
         let on_pick = on_pick.clone();
@@ -196,7 +196,7 @@ pub fn segmented<T: Copy + PartialEq + 'static, V: 'static>(
                 .min_w(px(56.))
                 .h(px(30.))
                 .px(px(12.))
-                .rounded_full()
+                .rounded(px(radius::CONTROL))
                 .cursor_pointer()
                 .when(on, |d| d.bg(t.layer).border_1().border_color(t.stroke_strong))
                 .child(caption(label, if on { t.text } else { t.text2 }).font_weight(FontWeight::MEDIUM))
@@ -216,7 +216,7 @@ pub fn icon_segmented<T: Copy + PartialEq + 'static, V: 'static>(
     on_pick: impl Fn(&mut V, T, &mut Context<V>) + 'static,
 ) -> Div {
     let on_pick = std::rc::Rc::new(on_pick);
-    let mut d = div().flex().flex_none().gap(px(2.)).p(px(3.)).rounded_full().bg(t.control);
+    let mut d = div().flex().flex_none().gap(px(2.)).p(px(3.)).rounded(px(radius::TRACK)).bg(t.control);
     for (i, (value, glyph, tip)) in choices.into_iter().enumerate() {
         let on = value == picked;
         let on_pick = on_pick.clone();
@@ -227,7 +227,7 @@ pub fn icon_segmented<T: Copy + PartialEq + 'static, V: 'static>(
             .justify_center()
             .w(px(36.))
             .h(px(30.))
-            .rounded_full()
+            .rounded(px(radius::CONTROL))
             .cursor_pointer()
             .when(on, |d| d.bg(t.layer).border_1().border_color(t.stroke_strong))
             .child(icon(glyph, 16., if on { t.text } else { t.text3 }))
@@ -259,7 +259,7 @@ pub fn filters<T: Copy + PartialEq + 'static, V: 'static>(
                 .items_center()
                 .h(px(32.))
                 .px(px(14.))
-                .rounded_full()
+                .rounded(px(radius::CONTROL))
                 .border_1()
                 .cursor_pointer()
                 .when(on, |d| d.bg(t.primary).border_color(t.primary))

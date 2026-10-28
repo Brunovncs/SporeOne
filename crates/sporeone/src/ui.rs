@@ -443,6 +443,42 @@ impl MainView {
         .detach();
     }
 
+    /// Asks for the folder of a game or Launcher Kit SporeOne did not find, and keeps it.
+    pub fn locate(&mut self, lk: bool, cx: &mut Context<Self>) {
+        let picked = cx.prompt_for_paths(PathPromptOptions { files: false, directories: true, multiple: false, prompt: None });
+        cx.spawn(async move |this, cx| {
+            let Ok(Ok(Some(paths))) = picked.await else { return };
+            let Some(dir) = paths.into_iter().next() else { return };
+            let _ = this.update(cx, |this, cx| {
+                let mut st = State::load();
+                let ok = if lk {
+                    let ok = sporeone_core::launcher_kit::is_launcher_kit(&dir);
+                    if ok {
+                        st.lk_dir = Some(dir);
+                    }
+                    ok
+                } else {
+                    let root = sporeone_core::game::game_root(&dir);
+                    let ok = root.is_some();
+                    if ok {
+                        st.game_dir = root;
+                    }
+                    ok
+                };
+                if ok {
+                    let _ = st.save();
+                    this.notice = None;
+                    this.reread(cx);
+                } else {
+                    let t = this.text;
+                    this.notice = Some(Notice { ok: false, text: (if lk { t.lk_wrong } else { t.game_wrong }).to_string() });
+                    cx.notify();
+                }
+            });
+        })
+        .detach();
+    }
+
     /// Takes a mod added from a link off the list. What is installed stays.
     pub fn remove_custom(&mut self, id: &str, cx: &mut Context<Self>) {
         let mut st = State::load();
@@ -603,7 +639,7 @@ impl MainView {
             .items_center()
             .h(px(30.))
             .px(px(14.))
-            .rounded_full()
+            .rounded(px(radius::CONTROL))
             .cursor_pointer()
             .when(on, |d| d.bg(t.layer).border_1().border_color(t.stroke_strong))
             .child(body(label, if on { t.text } else { t.text2 }).font_weight(gpui::FontWeight::MEDIUM))
@@ -640,7 +676,7 @@ impl MainView {
             .items_center()
             .gap(px(2.))
             .p(px(3.))
-            .rounded_full()
+            .rounded(px(radius::TRACK))
             .bg(t.control)
             .child(self.nav("nav-catalog", text.catalog.to_string(), Screen::Catalog, cx))
             .child(

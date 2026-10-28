@@ -197,6 +197,10 @@ pub struct Text {
     pub update_check: &'static str,
     pub update_checking: &'static str,
     pub update_latest: &'static str,
+    pub choose_folder: &'static str,
+    pub change_folder: &'static str,
+    pub lk_wrong: &'static str,
+    pub game_wrong: &'static str,
 }
 
 pub static EN: Text = Text {
@@ -346,6 +350,10 @@ pub static EN: Text = Text {
     update_check: "Check for updates",
     update_checking: "Checking",
     update_latest: "This is the latest version.",
+    choose_folder: "Choose its folder",
+    change_folder: "Change",
+    lk_wrong: "That folder has no Spore ModAPI Launcher.exe.",
+    game_wrong: "That is not Spore's folder: it has no SporebinEP1 or Data folder.",
 };
 
 pub static PT: Text = Text {
@@ -495,6 +503,10 @@ pub static PT: Text = Text {
     update_check: "Procurar atualização",
     update_checking: "Procurando",
     update_latest: "Esta é a versão mais nova.",
+    choose_folder: "Escolher a pasta",
+    change_folder: "Trocar",
+    lk_wrong: "Essa pasta não tem o Spore ModAPI Launcher.exe.",
+    game_wrong: "Essa não é a pasta do Spore: não tem SporebinEP1 nem Data.",
 };
 
 pub fn text(lang: Lang) -> &'static Text {

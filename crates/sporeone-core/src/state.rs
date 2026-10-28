@@ -40,6 +40,9 @@ pub struct State {
     pub custom: Vec<Entry>,
     /// The catalog as tiles rather than a list.
     pub grid: bool,
+    /// Folders picked by hand, for a game or a Launcher Kit SporeOne did not find.
+    pub game_dir: Option<PathBuf>,
+    pub lk_dir: Option<PathBuf>,
 }
 
 impl State {

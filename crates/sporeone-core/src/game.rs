@@ -174,7 +174,26 @@ pub fn find() -> Vec<Game> {
             add(Game::at(&root, None, None, false));
         }
     }
+    // A folder picked by hand comes first, as found above when it was there too.
+    if let Some(dir) = crate::state::State::load().game_dir.filter(|d| is_game_root(d)) {
+        let key = |p: &Path| p.to_string_lossy().trim_end_matches(['\\', '/']).to_ascii_lowercase();
+        let game = match found.iter().position(|g| key(&g.root) == key(&dir)) {
+            Some(i) => found.remove(i),
+            None => Game::at(&dir, None, None, false),
+        };
+        found.insert(0, game);
+    }
     found
+}
+
+/// Whether `dir` is a Spore folder: the one holding `SporebinEP1` or `Data`.
+pub fn is_game_root(dir: &Path) -> bool {
+    dir.join("SporebinEP1").is_dir() || dir.join("Data").is_dir()
+}
+
+/// The game's folder from one picked inside it, such as `SporebinEP1` or `DataEP1`.
+pub fn game_root(picked: &Path) -> Option<PathBuf> {
+    picked.ancestors().take(2).find(|d| is_game_root(d)).map(Path::to_path_buf)
 }
 
 /// `steamapps\common\Spore` in every Steam library that has Spore or Galactic Adventures.
@@ -238,6 +257,16 @@ pub fn is_game_file(name: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_folder_picked_inside_the_game_finds_its_root() {
+        let root = std::env::temp_dir().join(format!("sporeone-root-{}", std::process::id()));
+        std::fs::create_dir_all(root.join("SporebinEP1")).unwrap();
+        assert_eq!(game_root(&root), Some(root.clone()));
+        assert_eq!(game_root(&root.join("SporebinEP1")), Some(root.clone()));
+        assert_eq!(game_root(root.parent().unwrap()), None);
+        std::fs::remove_dir_all(&root).unwrap();
+    }
 
     #[test]
     fn reads_steam_library_folders() {

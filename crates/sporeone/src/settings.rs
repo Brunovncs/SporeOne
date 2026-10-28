@@ -3,7 +3,7 @@
 
 use crate::theme::{Theme, icon as glyph};
 use crate::ui::{AppUpdate, MainView, date, store_name};
-use crate::widgets::{Kind as Button, body, caption, display, group, icon, icon_label_button, row, section, segmented, strong};
+use crate::widgets::{Kind as Button, body, button, caption, display, group, icon, icon_label_button, row, section, segmented, strong};
 use gpui::prelude::FluentBuilder;
 use gpui::{AnyElement, Context, Div, IntoElement, ParentElement, StatefulInteractiveElement, Styled, Window, div, px};
 use sporeone_core::i18n::{Lang, fill};
@@ -21,6 +21,11 @@ fn site(t: &Theme, text: &sporeone_core::i18n::Text) -> gpui::Stateful<Div> {
         .on_click(|_, _, cx| cx.open_url(sporeone_core::launcher_kit::SITE))
 }
 
+/// Picks the folder of a game or Launcher Kit by hand.
+fn locate(id: &'static str, label: &'static str, lk: bool, t: &Theme, cx: &mut Context<MainView>) -> gpui::Stateful<Div> {
+    button(id, label, Button::Subtle, t).on_click(cx.listener(move |this, _, _, cx| this.locate(lk, cx)))
+}
+
 fn open_folder(path: PathBuf) -> impl Fn(&gpui::ClickEvent, &mut Window, &mut gpui::App) + 'static {
     move |_, _, cx| cx.open_url(&format!("file:///{}", path.display().to_string().replace('\\', "/")))
 }
@@ -32,7 +37,14 @@ impl MainView {
         let env = self.env.clone();
         let mut game = group(&t);
         match env.game() {
-            None => game = game.child(row(&t).child(icon(glyph::WARNING, 16., t.caution)).child(body(text.game_none, t.text).flex_1())),
+            None => {
+                game = game.child(
+                    row(&t)
+                        .child(icon(glyph::WARNING, 16., t.caution))
+                        .child(body(text.game_none, t.text).flex_1().min_w(px(0.)))
+                        .child(locate("game-locate", text.choose_folder, false, &t, cx)),
+                )
+            }
             Some(g) => {
                 let root = g.root.clone();
                 game = game
@@ -43,7 +55,8 @@ impl MainView {
                             .child(
                                 icon_label_button("game-folder", glyph::FOLDER, text.open_folder, Button::Subtle, &t)
                                     .on_click(open_folder(root)),
-                            ),
+                            )
+                            .child(locate("game-change", text.change_folder, false, &t, cx)),
                     )
                     .child(line(text.game_ga, if g.has_ga() { text.yes } else { text.no }.into(), Some(g.has_ga()), &t))
                     .child(line(
@@ -79,7 +92,7 @@ impl MainView {
             None => {
                 let busy = self.busy.contains_key("launcher-kit");
                 lk = lk.child(
-                    row(&t).child(body(text.lk_none, t.text).flex_1()).child(
+                    row(&t).child(body(text.lk_none, t.text).flex_1()).child(locate("lk-locate", text.choose_folder, true, &t, cx)).child(
                         icon_label_button(
                             "lk-install",
                             glyph::DOWNLOAD,
@@ -106,7 +119,8 @@ impl MainView {
                             .child(
                                 icon_label_button("lk-folder", glyph::FOLDER, text.open_folder, Button::Subtle, &t)
                                     .on_click(open_folder(dir)),
-                            ),
+                            )
+                            .child(locate("lk-change", text.change_folder, true, &t, cx)),
                     )
                     .child(line(text.lk_version, k.version.map(|v| v.to_string()).unwrap_or_default(), None, &t))
                     .child(line(text.lk_dlls, k.dlls_build.map(|v| v.to_string()).unwrap_or_default(), None, &t));

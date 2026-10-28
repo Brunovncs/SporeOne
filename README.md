@@ -13,7 +13,7 @@ It keeps mods up to date and updates itself from its own releases. You can also 
 not in the catalog, from a GitHub link or by dropping its file on the window, and suggest one for
 the catalog with a button.
 
-Version 0.0.3. SporeOne is not made by EA or Maxis, and the mods it lists are their authors' work.
+Version 0.0.4. SporeOne is not made by EA or Maxis, and the mods it lists are their authors' work.
 
 ## Install
 
