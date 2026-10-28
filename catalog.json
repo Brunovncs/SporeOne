@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-28T05:40:27Z",
+  "generated": "2026-10-28T12:52:05Z",
   "mods": [
     {
       "id": "Zarklord/UniversalPropertyEnhancer",
@@ -17,7 +17,7 @@
         "url": "https://github.com/Zarklord/UniversalPropertyEnhancer/releases/download/v1.2.0/UPEv1.2.0.sporemod",
         "file": "UPEv1.2.0.sporemod",
         "size": 43712,
-        "downloads": 19496,
+        "downloads": 19500,
         "sha256": "5975a842ca9d30a37b1656148fab7c40eb83c6f206d441379a5073c27df2c9fe"
       },
       "stars": 12,
@@ -67,7 +67,7 @@
         "url": "https://github.com/Rosalie241/SporeCrashFix/releases/download/v0.7/SporeCrashFix.sporemod",
         "file": "SporeCrashFix.sporemod",
         "size": 12623,
-        "downloads": 15582,
+        "downloads": 15589,
         "sha256": "dd5d095b5558b9f11e7bb62415aa1fcc06bc8dcf1bf669752b32b837e937f539"
       },
       "stars": 27,
@@ -133,7 +133,7 @@
         "url": "https://github.com/MADPSI/ProjectSkynkraft/releases/download/v2.5.5/PSI-113_Skynkraft.sporemod",
         "file": "PSI-113_Skynkraft.sporemod",
         "size": 105139418,
-        "downloads": 12390,
+        "downloads": 12393,
         "sha256": "bbaee8252bd6ead6a5f35d73f0220b54d652820c3115550faf386c91d030b069"
       },
       "stars": 1,
@@ -160,7 +160,7 @@
         "url": "https://github.com/Zarklord/Infinite-Part-Scaling/releases/download/v1.0.0/InfinitePartScaling.package",
         "file": "InfinitePartScaling.package",
         "size": 418,
-        "downloads": 11510,
+        "downloads": 11513,
         "sha256": "c2be62853bd9738259dc91ce82bbd82aec668e5309cbfe25c4a6b075ea38e904"
       },
       "stars": 3,
@@ -232,7 +232,7 @@
         "url": "https://github.com/MADPSI/ProjectReplicant/releases/download/v0.14.0/PSI-119_RigidParts_v0-14-0.sporemod",
         "file": "PSI-119_RigidParts_v0-14-0.sporemod",
         "size": 45577430,
-        "downloads": 10090,
+        "downloads": 10093,
         "sha256": "185c57ab370c36ed06779b77a5c0c2a3a1ac5086a3761e44bf3238b36512b9a8"
       },
       "stars": 4,
@@ -336,7 +336,7 @@
         "url": "https://github.com/emd4600/EnhancedColorPickerMod/releases/download/v1.2/EnhancedColorPicker.sporemod",
         "file": "EnhancedColorPicker.sporemod",
         "size": 62987,
-        "downloads": 9500,
+        "downloads": 9504,
         "sha256": "c030811d7a131708e6c34d6c641e83b860a9784dbf008248280fc42a55104cbb"
       },
       "stars": 11,
@@ -386,7 +386,7 @@
         "url": "https://github.com/Rosalie241/SporeAutoSave/releases/download/2.3/SporeAutoSave.sporemod",
         "file": "SporeAutoSave.sporemod",
         "size": 35637,
-        "downloads": 8090,
+        "downloads": 8093,
         "sha256": "c7fe843880eccad81dd0ef35e2ee9606777a2f8a2a47796d05f2a0ebc5c91ca4"
       },
       "stars": 20,
@@ -436,7 +436,7 @@
         "url": "https://github.com/TheDeltaUnit/DeltaPaints/releases/download/v1.0/Delta_Paints.package",
         "file": "Delta_Paints.package",
         "size": 60598182,
-        "downloads": 8069,
+        "downloads": 8071,
         "sha256": "f25ab6875e1612067af719e8375b88e7b07b0534259bbe15fc23b9155e007a29"
       },
       "stars": 4,
@@ -510,7 +510,7 @@
         "url": "https://github.com/emd4600/advanced-creature-paint/releases/download/v1.1/AdvancedCreaturePaint.sporemod",
         "file": "AdvancedCreaturePaint.sporemod",
         "size": 15119492,
-        "downloads": 7613,
+        "downloads": 7614,
         "sha256": "f3729622dafd4338aa42d4b2c0d49a0f46aa46831a4a93b6e30054b70d56f4d7"
       },
       "stars": 10,
@@ -537,7 +537,7 @@
         "url": "https://github.com/Zarklord/CellStagePartsAPI/releases/download/1.0.0/CellStagePlus.sporemod",
         "file": "CellStagePlus.sporemod",
         "size": 4009289,
-        "downloads": 6958,
+        "downloads": 6959,
         "sha256": "be1ad4b4cffe808609731e775f43453d61677522b27906398692a3fb2460aa7c"
       },
       "stars": 4,
@@ -587,7 +587,7 @@
         "url": "https://github.com/Rosalie241/SporeFixOnline/releases/download/v1.0.2/SporeFixOnline.sporemod",
         "file": "SporeFixOnline.sporemod",
         "size": 13677,
-        "downloads": 6553,
+        "downloads": 6555,
         "sha256": "b44453ba1905c9f9d36723fc9a0bf34bb01414c71495ea7de0280d5e7d31765c"
       },
       "stars": 12,
@@ -762,7 +762,7 @@
         "url": "https://github.com/VanillaCold/Spore-AdvancedCE/releases/download/3.0.2/AdvancedCE.sporemod",
         "file": "AdvancedCE.sporemod",
         "size": 2266483,
-        "downloads": 6411,
+        "downloads": 6414,
         "sha256": "a538fd44b007711f5de2979c56deb2aa5c4f28a4b8c19a1be325baad3c03dd90"
       },
       "stars": 9,
@@ -880,7 +880,7 @@
         "url": "https://github.com/MADPSI/CamBensColourPack/releases/download/v.4.3.5/CBCP_V4-3-5.sporemod",
         "file": "CBCP_V4-3-5.sporemod",
         "size": 24528571,
-        "downloads": 5535,
+        "downloads": 5537,
         "sha256": "019bab67bd7c45558e443d07080a4717cb33c29f2d382bf10b8285d4b23c027b"
       },
       "stars": 1,
@@ -1095,7 +1095,7 @@
         "url": "https://github.com/NeDether/Rattler-Spore/releases/download/v1.1.0/RattlerSpore.sporemod",
         "file": "RattlerSpore.sporemod",
         "size": 255822,
-        "downloads": 5483,
+        "downloads": 5485,
         "sha256": "292ae84eb4f1532a153ec90b1a2a733f36ac03a71adc8686ae4157a83298a566"
       },
       "stars": 18,
@@ -1145,7 +1145,7 @@
         "url": "https://github.com/Rosalie241/SporeBorderless/releases/download/1.2/SporeBorderless.sporemod",
         "file": "SporeBorderless.sporemod",
         "size": 10284,
-        "downloads": 5341,
+        "downloads": 5343,
         "sha256": "44f6a2033f5bb563d2e1733364ced9f8a7949afa6ca9da17f436cb50546bbfae"
       },
       "stars": 9,
@@ -1217,7 +1217,7 @@
         "url": "https://github.com/MADPSI/ProjectMadMannequins/releases/download/v2.3.1/PSI-120_MadMannequins_v2-3-1.sporemod",
         "file": "PSI-120_MadMannequins_v2-3-1.sporemod",
         "size": 76630358,
-        "downloads": 4968,
+        "downloads": 4969,
         "sha256": "f714725d49635417f9ece6bfd22425380697bbe8dd5bec42a75e3fdff83dc1bb"
       },
       "stars": 0,
@@ -1281,7 +1281,7 @@
         "url": "https://github.com/Liskomato/Spore-Always100AdventurePoints/releases/download/v1.0/Always100AdventurePoints.sporemod",
         "file": "Always100AdventurePoints.sporemod",
         "size": 22146,
-        "downloads": 4221,
+        "downloads": 4224,
         "sha256": "31c721fc2738687651ec613fe3ace66f1ff38b14f7bcf3f8ee6db30470c883bf"
       },
       "stars": 7,
@@ -1445,7 +1445,7 @@
         "url": "https://github.com/MADPSI/ArmouredAndDangerous/releases/download/v.1.0.0/PSI-501_ArmouredDangerous_v1-0-0.sporemod",
         "file": "PSI-501_ArmouredDangerous_v1-0-0.sporemod",
         "size": 109714170,
-        "downloads": 3917,
+        "downloads": 3918,
         "sha256": "85215024b76918451461da662c949702534433d4ab44f1920bdaa095059bc08c"
       },
       "stars": 0,
@@ -1495,7 +1495,7 @@
         "url": "https://github.com/VanillaCold/Spore-ChocAdventurePack/releases/download/1.0/ChocAdventurePack.sporemod",
         "file": "ChocAdventurePack.sporemod",
         "size": 6890462,
-        "downloads": 3779,
+        "downloads": 3780,
         "sha256": "ad86ae04ef0aacfb91e1edb665e5bc024645c6f8817100dea911d85363d7a1d8"
       },
       "stars": 4,
@@ -1553,7 +1553,7 @@
         "url": "https://github.com/justalawnchair/DefaultColony/releases/download/v0.2/DefaultColony.sporemod",
         "file": "DefaultColony.sporemod",
         "size": 32806,
-        "downloads": 3761,
+        "downloads": 3764,
         "sha256": "d0a1fffdd3f49123d8401d895f784ee1ff21bd7751f78a03c68ddee298f606e4"
       },
       "stars": 1,
@@ -1585,7 +1585,7 @@
         "url": "https://github.com/MADPSI/ProjectPandorasToolbox/releases/download/2.6.0cr/PandorasToolbox_v2-6-0.sporemod",
         "file": "PandorasToolbox_v2-6-0.sporemod",
         "size": 155865603,
-        "downloads": 3682,
+        "downloads": 3685,
         "sha256": "2e43511d3978e675a60a8e42d52b27c70c03077a0f0b2969f48efcab8655b372"
       },
       "stars": 0,
@@ -1645,7 +1645,7 @@
         "url": "https://github.com/0KepOnline/SPOREMod_UnusedPlanetThemes/releases/download/ModRelease/0KepOnline_UnusedPlanetThemes.package",
         "file": "0KepOnline_UnusedPlanetThemes.package",
         "size": 624872,
-        "downloads": 3089,
+        "downloads": 3090,
         "sha256": "2967c39bb4925c98da2badc2f35d919b51fa92e91e5a87a6129f241fc85eac06"
       },
       "stars": 2,
@@ -1695,7 +1695,7 @@
         "url": "https://github.com/VanillaCold/Spore-SpaceStageCrashFix/releases/download/v1.0/Spore-SpaceStageCrashFix.sporemod",
         "file": "Spore-SpaceStageCrashFix.sporemod",
         "size": 13047,
-        "downloads": 2852,
+        "downloads": 2853,
         "sha256": "cd26072a850320fd0767e507d365ab18b91f9e7a841ce4ec5fecc41ce04c497c"
       },
       "stars": 10,
@@ -1805,7 +1805,7 @@
         "url": "https://github.com/NeDether/Civ-Insanity/releases/download/kiwi-1.2/DeNethers_CivInsanity.sporemod",
         "file": "DeNethers_CivInsanity.sporemod",
         "size": 146647,
-        "downloads": 2653,
+        "downloads": 2655,
         "sha256": "4bedd2a3c1728ea53ba55b8e57d874efff2e0aef284ba90a1b036ea2ee66a989"
       },
       "stars": 8,
@@ -1913,7 +1913,7 @@
         "url": "https://github.com/Liskomato/Spore-AdventureSlotPageExpander/releases/download/2.0/AdventureSlotExpander_v2.sporemod",
         "file": "AdventureSlotExpander_v2.sporemod",
         "size": 1262852,
-        "downloads": 2362,
+        "downloads": 2364,
         "sha256": "ad01949bf830a1ed6dbe305f67ed0a6faac2495483c88212e6b956ccf6859c14"
       },
       "stars": 3,
@@ -1971,7 +1971,7 @@
         "url": "https://github.com/VanillaCold/SporeEnterEditor/releases/download/v3.0.0/entereditor.sporemod",
         "file": "entereditor.sporemod",
         "size": 18422,
-        "downloads": 2358,
+        "downloads": 2359,
         "sha256": "f0359ea0c5b033813a150dcc4b2fd69e8ceba5c696a20d5761efbbb52f4f9d7e"
       },
       "stars": 4,
@@ -2021,7 +2021,7 @@
         "url": "https://github.com/Studumb/RemoveGlideCap/releases/download/v.0.1/RemoveGlideCap.sporemod",
         "file": "RemoveGlideCap.sporemod",
         "size": 12554,
-        "downloads": 2236,
+        "downloads": 2237,
         "sha256": "6e5d0683ef15f32b18657bc312186ff76d8feb4f715d2cabcb62dd0042f5afd8"
       },
       "stars": 2,
@@ -2123,7 +2123,7 @@
         "url": "https://github.com/MADPSI/ProjectWorldcrafter/releases/download/v1.0.0/PSI-101_Worldcrafter.sporemod",
         "file": "PSI-101_Worldcrafter.sporemod",
         "size": 71105,
-        "downloads": 2227,
+        "downloads": 2228,
         "sha256": "1e8e10ffe07140f865b57f9c1ef6e7d4536aac2a5c75ec5cbb9ce570a8bb7457"
       },
       "stars": 2,
@@ -2205,7 +2205,7 @@
         "url": "https://github.com/plencka/spore-rich-presence/releases/download/v1.01/DiscordRichPresence.sporemod",
         "file": "DiscordRichPresence.sporemod",
         "size": 1414102,
-        "downloads": 2209,
+        "downloads": 2210,
         "sha256": "9073d98b6b178c20969c8af7c46776a25b105ce24642b4ff4dd3b1c6f1766557"
       },
       "stars": 11,
@@ -2255,7 +2255,7 @@
         "url": "https://github.com/VanillaCold/Spore-EffectOverrider/releases/download/1.0/EffectOverrider.sporemod",
         "file": "EffectOverrider.sporemod",
         "size": 16545,
-        "downloads": 2131,
+        "downloads": 2133,
         "sha256": "8ffd5ed75c93d90401ae1d21029c03a4d77e9271bbc5409213048a4de5eacdbe"
       },
       "stars": 2,
@@ -2345,7 +2345,7 @@
         "url": "https://github.com/Liskomato/Spore-CaptainVoiceDiversity/releases/download/2.0/CaptainVoiceDiversity_v2.sporemod",
         "file": "CaptainVoiceDiversity_v2.sporemod",
         "size": 16343,
-        "downloads": 2122,
+        "downloads": 2124,
         "sha256": "45b9bfc65b0be8a8c73df38293bd7d7ca161d0ac54f3ac344e13490be0d1a086"
       },
       "stars": 4,
@@ -2607,7 +2607,7 @@
         "url": "https://github.com/ZerbieSlug/Zerbie-Interface-Mod/releases/download/v3.1/ZerbieGraphics_Bundle.sporemod",
         "file": "ZerbieGraphics_Bundle.sporemod",
         "size": 54698420,
-        "downloads": 2112,
+        "downloads": 2114,
         "sha256": "c39e336d36f7fa5845ba551fdbdc07595ecc35589d01a6087c4728a710d9d0a8"
       },
       "stars": 2,
@@ -2658,7 +2658,7 @@
         "url": "https://github.com/Sadicto/Defensive-Ships-In-Player-Colonies/releases/download/v1.0.0/Defensive-Ships-In-Player-Colonies-v1.0.0.sporemod",
         "file": "Defensive-Ships-In-Player-Colonies-v1.0.0.sporemod",
         "size": 1829291,
-        "downloads": 1976,
+        "downloads": 1977,
         "sha256": "152c824179ff539e8cefc2e2eac05733a23edc21e5288c4012dd9e029b9c9bfa"
       },
       "stars": 6,
@@ -2724,7 +2724,7 @@
         "url": "https://github.com/MADPSI/ProjectUnshackled/releases/download/v0.8.1/PSI_106_Unshackled.sporemod",
         "file": "PSI_106_Unshackled.sporemod",
         "size": 59386,
-        "downloads": 1907,
+        "downloads": 1909,
         "sha256": "e9539541b156467a91bdffcaa41a191dcb0c2ae81ab6a28a972e13f3a77c2ab3"
       },
       "stars": 0,
@@ -2750,7 +2750,7 @@
         "url": "https://github.com/VanillaCold/Spore-EmpireInfo/releases/download/1.0/EmpireInfoPlus.sporemod",
         "file": "EmpireInfoPlus.sporemod",
         "size": 18384,
-        "downloads": 1728,
+        "downloads": 1729,
         "sha256": "11bdf1eacb4ecfdfe7e255295afd28874c00ce7df766ca7fc127b73241981655"
       },
       "stars": 9,
@@ -2808,7 +2808,7 @@
         "url": "https://github.com/VanillaCold/Spore-ChangeSpaceCaptain/releases/download/1.0/changecaptain.sporemod",
         "file": "changecaptain.sporemod",
         "size": 16868,
-        "downloads": 1613,
+        "downloads": 1615,
         "sha256": "8f54c52c977e933b1360cfe2aac1a7d04e67fa79bf6fa74b6da58fb77bcbfe60"
       },
       "stars": 3,
@@ -2835,7 +2835,7 @@
         "url": "https://github.com/Zarklord/Grox-Parts/releases/download/v1.0.0/GroxParts.package",
         "file": "GroxParts.package",
         "size": 477434,
-        "downloads": 1611,
+        "downloads": 1613,
         "sha256": "3ff2c67dd2d20b1463ee46bd64cdce5271ea8a707817411076f7add951a23877"
       },
       "stars": 4,
@@ -2862,7 +2862,7 @@
         "url": "https://github.com/Zarklord/SpaceStageTimelineFix/releases/download/v2.0.0/SpaceStageTimelineFixv2.0.0.sporemod",
         "file": "SpaceStageTimelineFixv2.0.0.sporemod",
         "size": 1604476,
-        "downloads": 1493,
+        "downloads": 1495,
         "sha256": "0ae87c250f90c1f560342af2abe5c77f8530207983a9cbac723b0348a3a42873"
       },
       "stars": 7,
@@ -2912,7 +2912,7 @@
         "url": "https://github.com/emd4600/MoreBackgroundButtonsMod/releases/download/v2/MoreBackgroundButtonsMod.sporemod",
         "file": "MoreBackgroundButtonsMod.sporemod",
         "size": 22433,
-        "downloads": 1450,
+        "downloads": 1452,
         "sha256": "c1974a7abeed7af886174960cbf37dbb31410fc2ee975f009c2e08f54c74e7b2"
       },
       "stars": 2,
@@ -2998,7 +2998,7 @@
         "url": "https://github.com/Kade-N/Spore-TotallyNotACheater/releases/download/1.0/Spore-TotallyNotACheater-1.0-Kade.sporemod",
         "file": "Spore-TotallyNotACheater-1.0-Kade.sporemod",
         "size": 16510,
-        "downloads": 1437,
+        "downloads": 1439,
         "sha256": "abadc8718da98f2dff815b498ba7a2b88dea10471d27c2f9eadf40f2abdc0957"
       },
       "stars": 2,
@@ -3056,7 +3056,7 @@
         "url": "https://github.com/Hyreon/Cargo-Triple-Deluxe-Spore-/releases/download/v1.0.1/Cargo_Triple_Deluxe.package",
         "file": "Cargo_Triple_Deluxe.package",
         "size": 52816,
-        "downloads": 1344,
+        "downloads": 1345,
         "sha256": "6bdb3560876ae431e1d4f76ccd8c05a4e190db716ba027d923dd424aa2bff45f"
       },
       "stars": 3,
@@ -3116,7 +3116,7 @@
         "url": "https://github.com/DogeisCut/ToggleStacker/releases/download/v1.1.0/ToggleStacker.sporemod",
         "file": "ToggleStacker.sporemod",
         "size": 19494,
-        "downloads": 1342,
+        "downloads": 1345,
         "sha256": "926b85edb3aece6a31472390acef0546a5b21e0ed10a6bdf5bb11cc4b9e75336"
       },
       "stars": 1,
@@ -3183,7 +3183,7 @@
         "url": "https://github.com/Mx3brainpower/ImprovedAnthemsMod/releases/download/v2.5/ImprovedAnthems.package",
         "file": "ImprovedAnthems.package",
         "size": 24433356,
-        "downloads": 1334,
+        "downloads": 1335,
         "sha256": "11afff132ee319140454cef3dfb97f67aaf014bbfc69d14e26f6e485e33c4819"
       },
       "stars": 5,
@@ -3234,7 +3234,7 @@
         "url": "https://github.com/Rebitaay/BetterCreatureCamera/releases/download/v1.0.1/BetterCreatureCamera-v1.0.1.sporemod",
         "file": "BetterCreatureCamera-v1.0.1.sporemod",
         "size": 1299,
-        "downloads": 1317,
+        "downloads": 1318,
         "sha256": "07379f8955651456a481eacbca0d32fa7a9dc282ec52f2c272fd1af20c58d07e"
       },
       "stars": 4,
@@ -3290,7 +3290,7 @@
         "url": "https://github.com/emd4600/Spore-LongerStarPlanetListUI/releases/download/v1/Spore-LongerStarPlanetListUI.sporemod",
         "file": "Spore-LongerStarPlanetListUI.sporemod",
         "size": 20014,
-        "downloads": 1189,
+        "downloads": 1190,
         "sha256": "fe0f9ecd8eb7adb75e97f821f571e0855f66d29d72d3e412a572ee81b02daadf"
       },
       "stars": 6,
@@ -3340,7 +3340,7 @@
         "url": "https://github.com/VanillaCold/Spore-ChangeSpice/releases/download/0.1/changeSpice.sporemod",
         "file": "changeSpice.sporemod",
         "size": 15943,
-        "downloads": 1123,
+        "downloads": 1124,
         "sha256": "82332fef513586c427619136ad564e632a428b965625f1370e22489dcd61994b"
       },
       "stars": 4,
@@ -3414,7 +3414,7 @@
         "url": "https://github.com/Liskomato/Spore-ShareSafeMusic/releases/download/v1.0/ShareSafeMusic_v1.0.sporemod",
         "file": "ShareSafeMusic_v1.0.sporemod",
         "size": 3895940,
-        "downloads": 1099,
+        "downloads": 1100,
         "sha256": "ed5158071b1f60c1b44804d52a4bc2320624f68083319c4758d205f2c3af584a"
       },
       "stars": 6,
@@ -3455,7 +3455,7 @@
         "url": "https://github.com/starturtle27/SPORE-morespacetools/releases/download/v0.1/MoreSpaceTools.package",
         "file": "MoreSpaceTools.package",
         "size": 7431,
-        "downloads": 1087,
+        "downloads": 1090,
         "sha256": "853f7eabf946be84bd003831b6d3afe3a3aa04aa0176b742270670a5d09b8aad"
       },
       "stars": 2,
@@ -3674,7 +3674,7 @@
         "url": "https://github.com/Sadicto/Empire-Info-on-Star-Tooltip/releases/download/v1.1.0/Empire-Info-on-Star-Tooltip-v1.1.0.sporemod",
         "file": "Empire-Info-on-Star-Tooltip-v1.1.0.sporemod",
         "size": 1866501,
-        "downloads": 1007,
+        "downloads": 1009,
         "sha256": "36aa847e5aaf446c9b5ae330b83667d0f88f87e875edf9e1b8b15ad1cbb4c78e"
       },
       "stars": 1,
@@ -3732,7 +3732,7 @@
         "url": "https://github.com/Studumb/SellAnyAmount/releases/download/v0.1.1/SellAnyAmount_v0.1.1.sporemod",
         "file": "SellAnyAmount_v0.1.1.sporemod",
         "size": 21973,
-        "downloads": 986,
+        "downloads": 987,
         "sha256": "73f0169c271c70226d4cf461d8e53ef9bb51c1b71a87dd7fcc6b17dafb07a06b"
       },
       "stars": 3,
@@ -3806,7 +3806,7 @@
         "url": "https://github.com/Liskomato/Spore-CreatureOutfitter/releases/download/1.1/CreatureOutfitter.package",
         "file": "CreatureOutfitter.package",
         "size": 1144139,
-        "downloads": 963,
+        "downloads": 964,
         "sha256": "c480ff72a6646b2bd59ecbcd2dc72983662d138000f3d575779af3b7a1f7c739"
       },
       "stars": 0,
@@ -3907,7 +3907,7 @@
         "url": "https://github.com/Liskomato/Spore-NewCaptainIdleAnimations/releases/download/v1.0/NewCaptainIdleAnimations.sporemod",
         "file": "NewCaptainIdleAnimations.sporemod",
         "size": 16656,
-        "downloads": 932,
+        "downloads": 933,
         "sha256": "387789535716886405cffb15299fffde9fa631f0c9601f20f784e3ca5b808ac3"
       },
       "stars": 5,
@@ -3981,7 +3981,7 @@
         "url": "https://github.com/emd4600/Spore-ModCreatorKit/releases/download/v1.2.0/ModCreatorKit.sporemod",
         "file": "ModCreatorKit.sporemod",
         "size": 37623,
-        "downloads": 921,
+        "downloads": 922,
         "sha256": "8edf3f7d445ed25a241328d644e7bc51620d2f9f9bac63d6df9c0aa616291979"
       },
       "stars": 5,
@@ -4039,7 +4039,7 @@
         "url": "https://github.com/Rosalie241/SporeNoMoreAdventures/releases/download/1.1/SporeNoMoreAdventures.sporemod",
         "file": "SporeNoMoreAdventures.sporemod",
         "size": 15111,
-        "downloads": 921,
+        "downloads": 922,
         "sha256": "df59bc20deae8940f65620da763feb4fb19502503527c6d4676366329a874fe4"
       },
       "stars": 5,
@@ -4137,7 +4137,7 @@
         "url": "https://github.com/Liskomato/Spore-AdventureTextLimitBreak/releases/download/v2.0/AdventureTextLimitBreak.sporemod",
         "file": "AdventureTextLimitBreak.sporemod",
         "size": 16358,
-        "downloads": 897,
+        "downloads": 898,
         "sha256": "fd33cd7575aa3d07a2329646766bb9e8e3c02be036c52dea1036095c1e1e24e1"
       },
       "stars": 6,
@@ -4187,7 +4187,7 @@
         "url": "https://github.com/VanillaCold/Spore-MultipleSaveFiles/releases/download/v1.0.1/MultipleSaveFiles.sporemod",
         "file": "MultipleSaveFiles.sporemod",
         "size": 16697,
-        "downloads": 895,
+        "downloads": 896,
         "sha256": "d8fa7cb926f4252356dbb079738d5cdbb3e234612560ce7fd53cc2d49964cdcd"
       },
       "stars": 5,
@@ -4228,7 +4228,7 @@
         "url": "https://github.com/RAYTRAC3R/RAYTRAC3R-s-Custom-Spore-Parts/releases/download/v1.0.0/RAYTRAC3R_Custom_Parts.sporemod",
         "file": "RAYTRAC3R_Custom_Parts.sporemod",
         "size": 865354,
-        "downloads": 855,
+        "downloads": 856,
         "sha256": "de68de2f5cc029eeee4eb34a9679cd434ca1587e53613c112845159444c08973"
       },
       "stars": 1,
@@ -4303,7 +4303,7 @@
         "url": "https://github.com/VanillaCold/Spore-ReplaceGrox/releases/download/1.0/ReplaceGrox.sporemod",
         "file": "ReplaceGrox.sporemod",
         "size": 13621,
-        "downloads": 823,
+        "downloads": 824,
         "sha256": "f65979c943b3a4b0e0710cdc8e384a72ce3db967bb7c0c8d1c8581f09b0bc52a"
       },
       "stars": 4,
@@ -4496,7 +4496,7 @@
         "url": "https://github.com/lunakibby/spore-SolarSystemTweaks/releases/download/1.2/Lunakibby_SolarSystemTweaks.sporemod",
         "file": "Lunakibby_SolarSystemTweaks.sporemod",
         "size": 97582,
-        "downloads": 808,
+        "downloads": 810,
         "sha256": "7b5874a958ae2a625e5dbed52d391d96457c1f6ba133659858cd8e571fc7ccbe"
       },
       "stars": 3,
@@ -4557,7 +4557,7 @@
         "url": "https://github.com/0KepOnline/SPOREMod_SkinningObjectsPack/releases/download/v1.3/0KepOnlineObjectsPack_v1.3.sporemod",
         "file": "0KepOnlineObjectsPack_v1.3.sporemod",
         "size": 2851460,
-        "downloads": 762,
+        "downloads": 763,
         "sha256": "742e3421bdee5d5a51f85367e7cb1964a4bde3fe9bd96762ca5815f683717a96"
       },
       "stars": 4,
@@ -4648,7 +4648,7 @@
         "url": "https://github.com/lunakibby/spore-WildlifeSanctuaryTweaks/releases/download/1.0/Lunakibby_WildlifeEnclosureTweaks.sporemod",
         "file": "Lunakibby_WildlifeEnclosureTweaks.sporemod",
         "size": 5515,
-        "downloads": 733,
+        "downloads": 735,
         "sha256": "c9c3e23a308d72a2352c5bf158a16d6e96a2cab367a1aee4ece17a906fbb3ba1"
       },
       "stars": 1,
@@ -4722,7 +4722,7 @@
         "url": "https://github.com/MADPSI/Cheatbox/releases/download/1.2.2r/PSI_Cheats_1-2-2r.sporemod",
         "file": "PSI_Cheats_1-2-2r.sporemod",
         "size": 59003,
-        "downloads": 722,
+        "downloads": 723,
         "sha256": "9d3a9c07fe9a77474183484f86bb3f120a376faf6af22a6380fdb7a05ba0de52"
       },
       "stars": 2,
@@ -4748,7 +4748,7 @@
         "url": "https://github.com/MarsIandare/Spore-Space-Stage-Taxes/releases/download/v1.0.0/SporeSpaceStageTaxes.sporemod",
         "file": "SporeSpaceStageTaxes.sporemod",
         "size": 18764,
-        "downloads": 709,
+        "downloads": 710,
         "sha256": "3e2bcbed6ba01bc9b6d58fc5f8299828a308c3b25a36e0624e259a8dffe44802"
       },
       "stars": 6,
@@ -4856,7 +4856,7 @@
         "url": "https://github.com/ZerbieSlug/Zerbie-Space-Stage-Mod/releases/download/v3.01/Zerbie_SpaceStage_Modification_Beta.package",
         "file": "Zerbie_SpaceStage_Modification_Beta.package",
         "size": 284210,
-        "downloads": 682,
+        "downloads": 683,
         "sha256": "3c5a95a96236b50a4b6ca4b7e301bc0502446b0a2d5c40210af4f40c746252a7"
       },
       "stars": 0,
@@ -4992,7 +4992,7 @@
         "url": "https://github.com/Spore-Community/Spore-CreationZIP-Porter/releases/download/v1.1/SporeCreationZIPPorter-v1-1.sporemod",
         "file": "SporeCreationZIPPorter-v1-1.sporemod",
         "size": 167428,
-        "downloads": 663,
+        "downloads": 664,
         "sha256": "7af2330bb0bb4d6d5d4f85fb9845bab22abe0a96a1697e626b271ccf6f917989"
       },
       "stars": 7,
@@ -5066,7 +5066,7 @@
         "url": "https://github.com/Liskomato/Spore-NeutralWinAnimations/releases/download/2.0b/NeutralWinAnimations_2b.package",
         "file": "NeutralWinAnimations_2b.package",
         "size": 212098,
-        "downloads": 661,
+        "downloads": 662,
         "sha256": "a0234247d7ac6f7bcad1b25a57b9b1c32e76da88214d9148a8adadb09f7630a5"
       },
       "stars": 1,
@@ -5116,7 +5116,7 @@
         "url": "https://github.com/Kisutora/KisuTweaks/releases/download/v1.5/KisuTweaks.package",
         "file": "KisuTweaks.package",
         "size": 1126514,
-        "downloads": 638,
+        "downloads": 639,
         "sha256": "366c74e145b6938211177d90fa33f91db79d0e8179c33e72a08349040826f6e6"
       },
       "stars": 7,
@@ -5156,12 +5156,12 @@
           "resources": 1
         },
         {
-          "id": "glowmin272/Terrascore-Paradise",
-          "resources": 8
-        },
-        {
           "id": "Gemini-HUN/Gemini_rebalanced_planet_spawning",
           "resources": 1
+        },
+        {
+          "id": "glowmin272/Terrascore-Paradise",
+          "resources": 8
         }
       ]
     },
@@ -5322,7 +5322,7 @@
         "url": "https://github.com/Kisutora/KisuVoiceReplacer/releases/download/v1.0/KisuVoiceReplacer.sporemod",
         "file": "KisuVoiceReplacer.sporemod",
         "size": 17938,
-        "downloads": 615,
+        "downloads": 616,
         "sha256": "d94e81ea8f6fd6944ca1a0862ff103c324e44a02f4a2c5e9fbe9d7a11c31c9ba"
       },
       "stars": 1,
@@ -5380,7 +5380,7 @@
         "url": "https://github.com/Liskomato/Spore-DescriptionLimitBreak/releases/download/v2.0/DescriptionLimitBreak.sporemod",
         "file": "DescriptionLimitBreak.sporemod",
         "size": 12153,
-        "downloads": 601,
+        "downloads": 602,
         "sha256": "1d176bf7ce7e734e0f2dd56ee9246b75f1c4aed38ec6408ba1ab94cf7aa64ad9"
       },
       "stars": 5,
@@ -5438,7 +5438,7 @@
         "url": "https://github.com/Liskomato/Spore-SetOfflineName-Cheat/releases/download/v1.1/SetOfflineName.sporemod",
         "file": "SetOfflineName.sporemod",
         "size": 20671,
-        "downloads": 531,
+        "downloads": 532,
         "sha256": "d01c9c3039ed6b95bb86f21ea114b1f7e2bdcd046edfb5eccf59d513916a6c24"
       },
       "stars": 4,
@@ -5488,7 +5488,7 @@
         "url": "https://github.com/0KepOnline/SPOREMod_CakeEditor/releases/download/v1.2/0KepOnlineCakeEditor_v1.2.package",
         "file": "0KepOnlineCakeEditor_v1.2.package",
         "size": 631339,
-        "downloads": 496,
+        "downloads": 497,
         "sha256": "37ee5bd839fb2c9ec0cd80f11b35bb769cb761b4c4649ae4f382104701c016f5"
       },
       "stars": 1,
@@ -5538,7 +5538,7 @@
         "url": "https://github.com/RedGrox2013/Unlimited-Colony/releases/download/v1.1/UnlimitedColony.sporemod",
         "file": "UnlimitedColony.sporemod",
         "size": 15235,
-        "downloads": 486,
+        "downloads": 487,
         "sha256": "ff089668dd370f489946036b0a04f91af5361d55f7ab22bc1f3a9fce3300dcd0"
       },
       "stars": 1,
@@ -5612,7 +5612,7 @@
         "url": "https://github.com/Kyrfuffle/Creature-Stage-Extender/releases/download/v2/Creature.Stage.Extender.sporemod",
         "file": "Creature.Stage.Extender.sporemod",
         "size": 9287,
-        "downloads": 445,
+        "downloads": 446,
         "sha256": "19d24db4c29fe68ec1114fc2c2a2c74010e67e94dda3ae878eaf096ffa802bdb"
       },
       "stars": 0,
@@ -5648,7 +5648,7 @@
         "url": "https://github.com/Studumb/MaxBugetCheat/releases/download/v0.2/MaxBudgetCheat_v0.2.sporemod",
         "file": "MaxBudgetCheat_v0.2.sporemod",
         "size": 12119,
-        "downloads": 415,
+        "downloads": 416,
         "sha256": "a6106e6bb0a97c5643c3616f0b7ecc7add853749ba33261b7bfed947ee56c656"
       },
       "stars": 0,
@@ -5778,7 +5778,7 @@
         "url": "https://github.com/Liskomato/Spore-AdventureCheckpoints/releases/download/v2.0/AdventureTimer%2BCheckpoints_v2.sporemod",
         "file": "AdventureTimer+Checkpoints_v2.sporemod",
         "size": 3839683,
-        "downloads": 413,
+        "downloads": 414,
         "sha256": "cb33e6e30aede896770a292bf55c006635cb55971d22ae19b21dd6e5ff01b803"
       },
       "stars": 4,
@@ -5825,7 +5825,7 @@
         "url": "https://github.com/Studumb/RemoveDuplicate/releases/download/v0.1/RemoveDuplicate.package",
         "file": "RemoveDuplicate.package",
         "size": 21144,
-        "downloads": 394,
+        "downloads": 395,
         "sha256": "9d602f41fdbb07040a65216f81e7b3647370b3488ebd3295a877ba6034392598"
       },
       "stars": 2,
@@ -5876,7 +5876,7 @@
         "url": "https://github.com/Sadicto/All-Spices-Max-Price/releases/download/v1.0.0/All-Spices-Max-Price-v1.0.0.sporemod",
         "file": "All-Spices-Max-Price-v1.0.0.sporemod",
         "size": 1681911,
-        "downloads": 374,
+        "downloads": 375,
         "sha256": "d47e530604b5a1ea1f4f3ed13d22223885d6eee17a9ce1d3a27ee3e91b65918d"
       },
       "stars": 0,
@@ -5926,7 +5926,7 @@
         "url": "https://github.com/glowmin272/Fast-Colony/releases/download/v1.0/FastColony.sporemod",
         "file": "FastColony.sporemod",
         "size": 1766,
-        "downloads": 340,
+        "downloads": 341,
         "sha256": "2b2b005f3fa26157328a5e225386ad2217da2dec8a2f11cc419ee81b4e195287"
       },
       "stars": 0,
@@ -5986,7 +5986,7 @@
         "url": "https://github.com/Kisutora/KisuFaces/releases/download/v1.2.2/KisuFaces.package",
         "file": "KisuFaces.package",
         "size": 1715903,
-        "downloads": 307,
+        "downloads": 308,
         "sha256": "3ea0977ccce7b1775c306691a7898b429e008a2841c60ba59cb4d415cf354a86"
       },
       "stars": 1,
@@ -6042,7 +6042,7 @@
         "url": "https://github.com/RedGrox2013/Prikol-GGENewGame/releases/download/v1.0/Prikol_GGENewGame.package",
         "file": "Prikol_GGENewGame.package",
         "size": 37829,
-        "downloads": 283,
+        "downloads": 284,
         "sha256": "021f1ca83b6b9a77489911a6cf4e7f5ccb1c6ed7df64b932df34759d323a9f9e"
       },
       "stars": 0,
@@ -6100,7 +6100,7 @@
         "url": "https://github.com/Studumb/Rigblock-Counter/releases/download/v0.2.1/RigblockCounter_v0.2.1.sporemod",
         "file": "RigblockCounter_v0.2.1.sporemod",
         "size": 28981,
-        "downloads": 281,
+        "downloads": 282,
         "sha256": "c75ef64f581492a1036646074102b4c065d40aa1cd4512035a78f0a2c01780e1"
       },
       "stars": 0,
@@ -6165,7 +6165,7 @@
         "url": "https://github.com/Kyrfuffle/Space-Events-Begone/releases/download/v1/Space.Events.Begone.sporemod",
         "file": "Space.Events.Begone.sporemod",
         "size": 4590,
-        "downloads": 276,
+        "downloads": 277,
         "sha256": "8cb23ef696771aa4a46387cd86be96bf7aec05219f57c36f60b5d4dd8f4e7c96"
       },
       "stars": 0,
@@ -6233,7 +6233,7 @@
         "url": "https://github.com/Liskomato/Spore-GalaxyMenuCheat/releases/download/v1.0/GalaxyMenuCheat.sporemod",
         "file": "GalaxyMenuCheat.sporemod",
         "size": 11696,
-        "downloads": 250,
+        "downloads": 251,
         "sha256": "cc7458dc49f82475596110fda96fca250d3ed434f39b846c27cadb620109f0d0"
       },
       "stars": 2,
@@ -7496,7 +7496,7 @@
         "url": "https://github.com/Sadicto/Space-Diplomacy-And-Warfare-Overhaul/releases/download/v0.2.1-beta/Space-Diplomacy-And-Warfare-Overhaul-v0.2.1-beta.sporemod",
         "file": "Space-Diplomacy-And-Warfare-Overhaul-v0.2.1-beta.sporemod",
         "size": 2751021,
-        "downloads": 231,
+        "downloads": 232,
         "sha256": "5adc1f97bc42e2ad253542800972fad83a797a94df61902c5b8cec43b3c1fbb7"
       },
       "stars": 10,
@@ -8227,7 +8227,7 @@
         "url": "https://github.com/Sadicto/Sensible-Ai-Colonization/releases/download/v2.2.1/Sensible-Ai-Colonization-v2.2.1.sporemod",
         "file": "Sensible-Ai-Colonization-v2.2.1.sporemod",
         "size": 2146034,
-        "downloads": 211,
+        "downloads": 215,
         "sha256": "1ef9fbf902da149a8d9e27ee0158704b5c4b6f7b62d8b3e0391e3dd63166ed21"
       },
       "stars": 6,
@@ -8277,7 +8277,7 @@
         "url": "https://github.com/Biolaser1/Player-Empire-Colony-Cap-10/releases/download/v1.0.0/PlayerEmpireColonyCap10.SPOREMOD",
         "file": "PlayerEmpireColonyCap10.SPOREMOD",
         "size": 12022,
-        "downloads": 204,
+        "downloads": 205,
         "sha256": "f4c1aa06869f877f9d32d90372f4a0eaeaba09ba1a8694898991c01e7e2e4c27"
       },
       "stars": 2,
@@ -8349,7 +8349,7 @@
         "url": "https://github.com/VanillaCold/Spore-CustomAssetTypes/releases/download/v0.1-beta/Create-a-Type.sporemod",
         "file": "Create-a-Type.sporemod",
         "size": 24008,
-        "downloads": 191,
+        "downloads": 192,
         "sha256": "1a0b89ba6e533b764f8321805b820fccca2ffb9438270d2343844d1aca2a25f6"
       },
       "stars": 1,
@@ -8399,7 +8399,7 @@
         "url": "https://github.com/Kade-N/Spore-Creation-Metadata/releases/download/1.1/SporeCreationMetadata-1.1.sporemod",
         "file": "SporeCreationMetadata-1.1.sporemod",
         "size": 52194,
-        "downloads": 173,
+        "downloads": 174,
         "sha256": "b406539000f006d019f914068cd44261753da9b8111c966825c73394cfcc4937"
       },
       "stars": 4,
@@ -8463,7 +8463,7 @@
         "url": "https://github.com/Kyrfuffle/Kyrfaces/releases/download/v1/Kyrfaces.sporemod",
         "file": "Kyrfaces.sporemod",
         "size": 2745477,
-        "downloads": 163,
+        "downloads": 164,
         "sha256": "6ed93c483494cc52ac6e4aae16b84554c2c4a702c1e7e5ae5cfd42e557cbcd2d"
       },
       "stars": 0,
@@ -8519,7 +8519,7 @@
         "url": "https://github.com/glowmin272/Ridiculous-Drives/releases/download/v1.0/RidiculousDrives.sporemod",
         "file": "RidiculousDrives.sporemod",
         "size": 2253,
-        "downloads": 152,
+        "downloads": 153,
         "sha256": "c66c9be77b4b0a7a22fb5c98bb23e298db7671f0c9903a6656e91a4c678e0794"
       },
       "stars": 0,
@@ -8545,7 +8545,7 @@
         "url": "https://github.com/Studumb/InvincibleCheat/releases/download/v0.1/InvincibleCheat.sporemod",
         "file": "InvincibleCheat.sporemod",
         "size": 11757,
-        "downloads": 134,
+        "downloads": 135,
         "sha256": "2e80720d627ba161cfc07d1ac9bfa4878347b6ade257c2c49ab44b8b6bf18ce1"
       },
       "stars": 1,
@@ -8627,7 +8627,7 @@
         "url": "https://github.com/Liskomato/Spore-DebugWindow/releases/download/v1.0/DebugWindow.sporemod",
         "file": "DebugWindow.sporemod",
         "size": 18786,
-        "downloads": 126,
+        "downloads": 127,
         "sha256": "746c17cca4267503e30178b58ff6e59c09d00e3232de424a96e8ac03a41fa392"
       },
       "stars": 2,
@@ -8810,7 +8810,7 @@
         "url": "https://github.com/Sadicto/Empire-Color-Customization/releases/download/v1.0.1/Empire-Color-Customization-v1.0.1.sporemod",
         "file": "Empire-Color-Customization-v1.0.1.sporemod",
         "size": 2042757,
-        "downloads": 125,
+        "downloads": 126,
         "sha256": "e559bef38d8d339b3370342a16cd44d23718bcb94a827cbd69f61e3b1c8c4a5e"
       },
       "stars": 0,
@@ -8868,7 +8868,7 @@
         "url": "https://github.com/RedGrox2013/PrikolCheats/releases/download/v1.0/PrikolCheats.sporemod",
         "file": "PrikolCheats.sporemod",
         "size": 136023,
-        "downloads": 118,
+        "downloads": 119,
         "sha256": "fe01b4da06df1c2b102958e8f7afd21af392f3f5e0554233a6a0f2412d7c7962"
       },
       "stars": 0,
@@ -8926,7 +8926,7 @@
         "url": "https://github.com/RedGrox2013/AnimPlayer/releases/download/v1.2/AnimPlayer.sporemod",
         "file": "AnimPlayer.sporemod",
         "size": 1566791,
-        "downloads": 115,
+        "downloads": 116,
         "sha256": "e4dc0649c53f8f1cc343761c4920aa69cc15f22ee56320dbbdb80bd200c128b7"
       },
       "stars": 1,
@@ -9061,7 +9061,7 @@
         "url": "https://github.com/TheBreadguette/Creature-Stage-Extender-Extended-Edition/releases/download/v1.1/Creature-Stage-Extender-Extended-Edition-1.1.sporemod",
         "file": "Creature-Stage-Extender-Extended-Edition-1.1.sporemod",
         "size": 16370,
-        "downloads": 112,
+        "downloads": 113,
         "sha256": "6db9a7cf35a2d769bc5996102bce7b91eb6d4b79c5d7e77fdd1fd5a6893f5d74"
       },
       "stars": 0,
@@ -9129,7 +9129,7 @@
         "url": "https://github.com/VanillaCold/Spore-CustomAbilityPOC/releases/download/1.0/CustomAbilityConcept.sporemod",
         "file": "CustomAbilityConcept.sporemod",
         "size": 77379,
-        "downloads": 109,
+        "downloads": 110,
         "sha256": "f0d6b521f4167267f623a31ef3378fc8990f8d1d56810f939cd52f2708ee9aa8"
       },
       "stars": 0,
@@ -9211,7 +9211,7 @@
         "url": "https://github.com/Biolaser1/T0-Full-Colonies/releases/download/v1.0.0/T0FullColonies.SPOREMOD",
         "file": "T0FullColonies.SPOREMOD",
         "size": 35506,
-        "downloads": 108,
+        "downloads": 109,
         "sha256": "6d3853a3c3778c51c709a5f4920d235534d0845e701292f9cb255cadece4af6f"
       },
       "stars": 1,
@@ -9267,7 +9267,7 @@
         "url": "https://github.com/Unamelable/spore_snappysolarsystem/releases/download/1.0/SnappySolarSystem.sporemod",
         "file": "SnappySolarSystem.sporemod",
         "size": 5280,
-        "downloads": 108,
+        "downloads": 109,
         "sha256": "0c03a0f0d087a750667e986d723905591cabfd0d40baf80e5579be8873bd324b"
       },
       "stars": 0,
@@ -9300,7 +9300,7 @@
         "url": "https://github.com/Gemini-HUN/Spore_hidden_planets/releases/download/1.4.0/Hidden_planets.package",
         "file": "Hidden_planets.package",
         "size": 10370010,
-        "downloads": 105,
+        "downloads": 106,
         "sha256": "4b755f97b1676d18b825d3a019db3543eb56cfc555a6adf7e55893e3c1ed6deb"
       },
       "stars": 0,
@@ -9350,7 +9350,7 @@
         "url": "https://github.com/VanillaCold/Spore-LocalSavedata/releases/download/1.0/LocalSavedata.sporemod",
         "file": "LocalSavedata.sporemod",
         "size": 14001,
-        "downloads": 104,
+        "downloads": 105,
         "sha256": "1c4cdd545ae3727998d761a4e6d926a3f69596c81aff97f0f546d5b57177cef5"
       },
       "stars": 0,
@@ -9377,7 +9377,7 @@
         "url": "https://github.com/Gemini-HUN/Spore_Henry_rogue/releases/download/1.1.0/Henry_rogue.package",
         "file": "Henry_rogue.package",
         "size": 33357,
-        "downloads": 97,
+        "downloads": 98,
         "sha256": "cdcd130a30ef6c326bdb7b6ae9e3caa3b3e76ee7d9c2719b9a1911b12be8ba2a"
       },
       "stars": 0,
@@ -9479,7 +9479,7 @@
         "url": "https://github.com/Spore-Community/Spore-AdventureLocalizer/releases/download/v1.2/AdventureLocalizer_v1-2.sporemod",
         "file": "AdventureLocalizer_v1-2.sporemod",
         "size": 321571,
-        "downloads": 91,
+        "downloads": 92,
         "sha256": "1db913e1e406ec6ea6aa9a1da2081af6a9a0b409cbe3c0142a356176ec814327"
       },
       "stars": 2,
@@ -9505,7 +9505,7 @@
         "url": "https://github.com/Chronomaza/Rude-hints/releases/download/v1.0.1/Rude_hints.package",
         "file": "Rude_hints.package",
         "size": 67974,
-        "downloads": 89,
+        "downloads": 90,
         "sha256": "a4fc1e8baf570bb7e4d5cc4170c75a7f34d286bc0df7bb3f50cca6fd6340b51c"
       },
       "stars": 0,
@@ -9515,62 +9515,6 @@
         "galactic_adventures": true,
         "launcher_kit": true
       }
-    },
-    {
-      "id": "glowmin272/Terrascore-Paradise",
-      "name": "Terraformer Paradise",
-      "author": "glowmin272",
-      "description": "This mod speeds up the process of getting terraforming tools by lowering the badge requirements for them and standardizing lower prices across all empires.",
-      "kind": "release",
-      "category": "tools",
-      "status": "maintained",
-      "page": "https://github.com/glowmin272/Terrascore-Paradise",
-      "info": {
-        "unique": "glowTP",
-        "display_name": "Terraformer Paradise",
-        "description": "This mod speeds up the process of getting terraforming tools by lowering the badge requirements for them and standardizing lower prices across all empires.",
-        "format": "1.0.1.0",
-        "version": null,
-        "dlls_build": "2.5.20",
-        "depends": [],
-        "has_custom_installer": true,
-        "experimental": false,
-        "requires_galaxy_reset": false,
-        "save_data_dependency": false,
-        "compat_only": false,
-        "items": [
-          {
-            "Prerequisite": [
-              [
-                "Terraformer_Paradise.package",
-                "GalacticAdventures"
-              ]
-            ]
-          }
-        ]
-      },
-      "release": {
-        "tag": "v1.1",
-        "published": "2025-08-16T04:39:52Z",
-        "url": "https://github.com/glowmin272/Terrascore-Paradise/releases/download/v1.1/TerrascoreParadise.sporemod",
-        "file": "TerrascoreParadise.sporemod",
-        "size": 3119,
-        "downloads": 68,
-        "sha256": "abe3d74bd6b56ffe397f23c459e307e274548187d66f6471301db07082e62253"
-      },
-      "stars": 0,
-      "updated": "2025-08-16T04:39:52Z",
-      "needs": {
-        "stores": [],
-        "galactic_adventures": true,
-        "launcher_kit": true
-      },
-      "overlaps": [
-        {
-          "id": "Kisutora/KisuTweaks",
-          "resources": 8
-        }
-      ]
     },
     {
       "id": "A-xesey/Scenario_ShareSafe_TexturesEffects",
@@ -9619,7 +9563,7 @@
         "url": "https://github.com/A-xesey/Scenario_ShareSafe_TexturesEffects/releases/download/v1.1.0/Scenario_ShareSafe_TexturesEffects-v1.1.0.sporemod",
         "file": "Scenario_ShareSafe_TexturesEffects-v1.1.0.sporemod",
         "size": 1253421,
-        "downloads": 66,
+        "downloads": 69,
         "sha256": "2b2eb072128182254b63e4f22ceb9ead2512a962c111fd68e3d1149ab0d0f700"
       },
       "stars": 3,
@@ -9629,6 +9573,62 @@
         "galactic_adventures": true,
         "launcher_kit": true
       }
+    },
+    {
+      "id": "glowmin272/Terrascore-Paradise",
+      "name": "Terraformer Paradise",
+      "author": "glowmin272",
+      "description": "This mod speeds up the process of getting terraforming tools by lowering the badge requirements for them and standardizing lower prices across all empires.",
+      "kind": "release",
+      "category": "tools",
+      "status": "maintained",
+      "page": "https://github.com/glowmin272/Terrascore-Paradise",
+      "info": {
+        "unique": "glowTP",
+        "display_name": "Terraformer Paradise",
+        "description": "This mod speeds up the process of getting terraforming tools by lowering the badge requirements for them and standardizing lower prices across all empires.",
+        "format": "1.0.1.0",
+        "version": null,
+        "dlls_build": "2.5.20",
+        "depends": [],
+        "has_custom_installer": true,
+        "experimental": false,
+        "requires_galaxy_reset": false,
+        "save_data_dependency": false,
+        "compat_only": false,
+        "items": [
+          {
+            "Prerequisite": [
+              [
+                "Terraformer_Paradise.package",
+                "GalacticAdventures"
+              ]
+            ]
+          }
+        ]
+      },
+      "release": {
+        "tag": "v1.1",
+        "published": "2025-08-16T04:39:52Z",
+        "url": "https://github.com/glowmin272/Terrascore-Paradise/releases/download/v1.1/TerrascoreParadise.sporemod",
+        "file": "TerrascoreParadise.sporemod",
+        "size": 3119,
+        "downloads": 69,
+        "sha256": "abe3d74bd6b56ffe397f23c459e307e274548187d66f6471301db07082e62253"
+      },
+      "stars": 0,
+      "updated": "2025-08-16T04:39:52Z",
+      "needs": {
+        "stores": [],
+        "galactic_adventures": true,
+        "launcher_kit": true
+      },
+      "overlaps": [
+        {
+          "id": "Kisutora/KisuTweaks",
+          "resources": 8
+        }
+      ]
     },
     {
       "id": "A-xesey/Delete-Parts-Button",
@@ -9677,7 +9677,7 @@
         "url": "https://github.com/A-xesey/Delete-Parts-Button/releases/download/1.2/DeletePartsButton.sporemod",
         "file": "DeletePartsButton.sporemod",
         "size": 18510,
-        "downloads": 65,
+        "downloads": 66,
         "sha256": "244948fc28764a1c1347675fe56e277c14a00b7f8b1d85700e09f69c0ff5c133"
       },
       "stars": 1,
@@ -9703,7 +9703,7 @@
         "url": "https://github.com/Chronomaza/Epic-space-battles-Music-replacement-/releases/download/v1.0.0/Epicspacemusic.package",
         "file": "Epicspacemusic.package",
         "size": 7117169,
-        "downloads": 63,
+        "downloads": 64,
         "sha256": "ffa3652128a97c18ed2a3b2c9d42151010aba710afe49279c38b3f3acf671027"
       },
       "stars": 0,
@@ -9753,7 +9753,7 @@
         "url": "https://github.com/Unamelable/spore_fast_terrascore/releases/download/1.0/fast_terrascore.sporemod",
         "file": "fast_terrascore.sporemod",
         "size": 24345,
-        "downloads": 63,
+        "downloads": 64,
         "sha256": "e7ab7dd615525c3b8bf370182fe9e50cf8ed95d90cb82c345fec5efa8c96b2c6"
       },
       "stars": 0,
@@ -9779,7 +9779,7 @@
         "url": "https://github.com/Chronomaza/Better-Descriptions/releases/download/v1.0.0/BetterAbilityDescriptions.package",
         "file": "BetterAbilityDescriptions.package",
         "size": 23550,
-        "downloads": 59,
+        "downloads": 60,
         "sha256": "ef1f8e49e4cd26222268908785eb45b023e1ed81cdf621430abb45deaacb62b4"
       },
       "stars": 0,
@@ -9789,6 +9789,51 @@
         "galactic_adventures": true,
         "launcher_kit": true
       }
+    },
+    {
+      "id": "WoodyWizard/SporeCoop",
+      "name": "SporeCoop",
+      "author": "WoodyWizard",
+      "description": "Co-op for two to four players in one world, through every stage from Cell to Space. The host runs the world and every player needs the game and the same SporeCoop version.",
+      "kind": "setup",
+      "category": "multiplayer",
+      "status": "experimental",
+      "page": "https://github.com/WoodyWizard/SporeCoop",
+      "release": {
+        "tag": "v0.7.2.4",
+        "published": "2026-10-25T21:33:52Z",
+        "url": "https://github.com/WoodyWizard/SporeCoop/releases/download/v0.7.2.4/SporeCoopSetup.exe",
+        "file": "SporeCoopSetup.exe",
+        "size": 461824,
+        "downloads": 57,
+        "sha256": "c10168356a7dded9f4fac9aa819e5487c8d29c3aab90463043854367477a363d"
+      },
+      "stars": 18,
+      "updated": "2026-10-28T12:35:31Z",
+      "needs": {
+        "stores": [
+          "Steam",
+          "Gog"
+        ],
+        "galactic_adventures": true,
+        "launcher_kit": false
+      },
+      "notes": [
+        {
+          "en": "Installed by its own setup, outside the Launcher Kit: it replaces steam_api.dll with a loader and keeps the original next to it.",
+          "pt": "Instalado pelo próprio instalador, fora do Launcher Kit: troca o steam_api.dll por um carregador e guarda o original ao lado."
+        },
+        {
+          "en": "Steam and GOG copies only. Over the internet it needs a private network such as Tailscale, or a forwarded port.",
+          "pt": "Só cópias da Steam e da GOG. Pela internet precisa de uma rede privada como o Tailscale, ou de uma porta liberada."
+        },
+        {
+          "en": "Not tested together with Launcher Kit mods yet.",
+          "pt": "Ainda não foi testado junto com mods do Launcher Kit."
+        }
+      ],
+      "marker": "SporebinEP1/sporekit.dll",
+      "setup": "SporeCoopSetup.exe"
     },
     {
       "id": "Gemini-HUN/Spor-o-mega",
@@ -9821,7 +9866,7 @@
         "url": "https://github.com/Gemini-HUN/Spor-o-mega/releases/download/1.4.0/sporomega.package",
         "file": "sporomega.package",
         "size": 464987,
-        "downloads": 55,
+        "downloads": 56,
         "sha256": "63503ad6b69b67fd14c5b931c2ede23533dd27e265bebd47194ceb1b8be05dcc"
       },
       "stars": 2,
@@ -9837,51 +9882,6 @@
           "resources": 1
         }
       ]
-    },
-    {
-      "id": "WoodyWizard/SporeCoop",
-      "name": "SporeCoop",
-      "author": "WoodyWizard",
-      "description": "Co-op for two to four players in one world, through every stage from Cell to Space. The host runs the world and every player needs the game and the same SporeCoop version.",
-      "kind": "setup",
-      "category": "multiplayer",
-      "status": "experimental",
-      "page": "https://github.com/WoodyWizard/SporeCoop",
-      "release": {
-        "tag": "v0.7.2.4",
-        "published": "2026-10-25T21:33:52Z",
-        "url": "https://github.com/WoodyWizard/SporeCoop/releases/download/v0.7.2.4/SporeCoopSetup.exe",
-        "file": "SporeCoopSetup.exe",
-        "size": 461824,
-        "downloads": 53,
-        "sha256": "c10168356a7dded9f4fac9aa819e5487c8d29c3aab90463043854367477a363d"
-      },
-      "stars": 18,
-      "updated": "2026-10-28T02:16:20Z",
-      "needs": {
-        "stores": [
-          "Steam",
-          "Gog"
-        ],
-        "galactic_adventures": true,
-        "launcher_kit": false
-      },
-      "notes": [
-        {
-          "en": "Installed by its own setup, outside the Launcher Kit: it replaces steam_api.dll with a loader and keeps the original next to it.",
-          "pt": "Instalado pelo próprio instalador, fora do Launcher Kit: troca o steam_api.dll por um carregador e guarda o original ao lado."
-        },
-        {
-          "en": "Steam and GOG copies only. Over the internet it needs a private network such as Tailscale, or a forwarded port.",
-          "pt": "Só cópias da Steam e da GOG. Pela internet precisa de uma rede privada como o Tailscale, ou de uma porta liberada."
-        },
-        {
-          "en": "Not tested together with Launcher Kit mods yet.",
-          "pt": "Ainda não foi testado junto com mods do Launcher Kit."
-        }
-      ],
-      "marker": "SporebinEP1/sporekit.dll",
-      "setup": "SporeCoopSetup.exe"
     },
     {
       "id": "Liskomato/Spore-AutoMusicReplacer",
@@ -9930,7 +9930,7 @@
         "url": "https://github.com/Liskomato/Spore-AutoMusicReplacer/releases/download/v0.3/Spore-AutoMusicReplacer-v0.3.sporemod",
         "file": "Spore-AutoMusicReplacer-v0.3.sporemod",
         "size": 1963269,
-        "downloads": 51,
+        "downloads": 52,
         "sha256": "871a5b4909e7eeef520936340b166220f17e2e4025babda7754cda1c95782930"
       },
       "stars": 1,
@@ -9957,7 +9957,7 @@
         "url": "https://github.com/Gemini-HUN/2008_feb_starter_worlds/releases/download/1.1.0/2008_feb_starter_worlds.package",
         "file": "2008_feb_starter_worlds.package",
         "size": 1620130,
-        "downloads": 51,
+        "downloads": 52,
         "sha256": "b9c42346a3a67a6713d2c2b842165b2acb82b0000b154d64bbc5563b096ca96e"
       },
       "stars": 0,
@@ -9983,7 +9983,7 @@
         "url": "https://github.com/Cristonimus/Spore-HarvesterEditorMusicRestored/releases/download/V0.3/HarvesterMusicOnEveryVehicleEditor.V0.3.package",
         "file": "HarvesterMusicOnEveryVehicleEditor.V0.3.package",
         "size": 499929,
-        "downloads": 50,
+        "downloads": 51,
         "sha256": "965c3a9c3ef2dbdc2dd295638db70bfea713434a469fb63202a56c97872db4b4"
       },
       "stars": 0,
@@ -10009,7 +10009,7 @@
         "url": "https://github.com/Darhagonable/CityWalls/releases/download/1.0.0/Dar_CityWalls.package",
         "file": "Dar_CityWalls.package",
         "size": 14894536,
-        "downloads": 47,
+        "downloads": 48,
         "sha256": "bd2ef1b7d26f1a3135b5275a98347a3b3ddddc51a784ffd2bbdc5a1842a9aa80"
       },
       "stars": 1,
@@ -10077,7 +10077,7 @@
         "url": "https://github.com/NeDether/Spore-RF4-Editor/releases/download/1.0.0/Spore-RF4-Editor.sporemod",
         "file": "Spore-RF4-Editor.sporemod",
         "size": 3466955,
-        "downloads": 45,
+        "downloads": 46,
         "sha256": "72d6e193ea0c480539acd4afbeab3d3cae2f22fae323cb6a5dc4da833d623346"
       },
       "stars": 0,
@@ -10127,7 +10127,7 @@
         "url": "https://github.com/0KepOnline/SPOREMod_SaveAsPlanetTemplate/releases/download/v1.0.1/SPOREMod_SaveAsPlanetTemplate-v1.0.1.sporemod",
         "file": "SPOREMod_SaveAsPlanetTemplate-v1.0.1.sporemod",
         "size": 12332,
-        "downloads": 43,
+        "downloads": 44,
         "sha256": "6e36046250ed7110b82da9e1738b632bd61d5ecb607b76c08a535e8a48b8d351"
       },
       "stars": 0,
@@ -10153,7 +10153,7 @@
         "url": "https://github.com/Hyreon/Space-Badge-Rebalance-Spore-/releases/download/v1.0/Space-Badge-Rebalance.package",
         "file": "Space-Badge-Rebalance.package",
         "size": 369312,
-        "downloads": 41,
+        "downloads": 42,
         "sha256": "24531eb01421f6a0ce9843f75e869a0cb3679adc7be48ae75d205dba03c79544"
       },
       "stars": 0,
@@ -10222,7 +10222,7 @@
         "url": "https://github.com/materusPL/Spore-UnlimitedColoniesOnPlanet/releases/download/1.0.0/Spore-UnlimitedColoniesOnPlanet.sporemod",
         "file": "Spore-UnlimitedColoniesOnPlanet.sporemod",
         "size": 12284,
-        "downloads": 39,
+        "downloads": 40,
         "sha256": "c316775a46d399b76109c1b8397bf36b3c7650e6b97fe6c4b90c92f3559ed2ac"
       },
       "stars": 0,
@@ -10248,7 +10248,7 @@
         "url": "https://github.com/Chronomaza/Delightful-Universe/releases/download/v1.0.0/Delightful_universe.package",
         "file": "Delightful_universe.package",
         "size": 7226248,
-        "downloads": 35,
+        "downloads": 36,
         "sha256": "c2a9650d9ff3dc43cc0ae88b0ef8b5ade145f802f81cef3a2b197d3c54408b80"
       },
       "stars": 0,
@@ -10274,7 +10274,7 @@
         "url": "https://github.com/Gemini-HUN/Gemini_rebalanced_planet_spawning/releases/download/1.1.0/Gemini_rebalanced_planet_spawning.package",
         "file": "Gemini_rebalanced_planet_spawning.package",
         "size": 853,
-        "downloads": 35,
+        "downloads": 36,
         "sha256": "907173a1e2bae47a9892d700e24b549fefd3ddd8c9e2cda58182e7bc08f62ed0"
       },
       "stars": 0,
@@ -10310,7 +10310,7 @@
         "url": "https://github.com/Chronomaza/METAL-tribes/releases/download/v1.0.1/METAL_Tribes.package",
         "file": "METAL_Tribes.package",
         "size": 2896535,
-        "downloads": 34,
+        "downloads": 35,
         "sha256": "42008ba719216df2e3f552a55a154ee3d172be55a15540854818152f42dff86c"
       },
       "stars": 0,
@@ -10337,7 +10337,7 @@
         "url": "https://github.com/Gemini-HUN/2008_feb_Gemini_beta_planets/releases/download/1.2.3/2008_feb_Gemini_beta_planets.package",
         "file": "2008_feb_Gemini_beta_planets.package",
         "size": 4544643,
-        "downloads": 32,
+        "downloads": 33,
         "sha256": "eaf33b966aafad579fa60f3c3bd434ed5436f9af4cf3cd2c45814dae3ad56374"
       },
       "stars": 0,
@@ -10387,7 +10387,7 @@
         "url": "https://github.com/ihategithab/VehiCE/releases/download/1.0.0/Vehice.package",
         "file": "Vehice.package",
         "size": 58684600,
-        "downloads": 29,
+        "downloads": 30,
         "sha256": "8882b51cf2b5b03359b9f3c318cd1bc044746c9891fb5d234c63aeff42a3f5b4"
       },
       "stars": 0,
@@ -10419,7 +10419,7 @@
         "url": "https://github.com/Chronomaza/Longer-Loading-Music/releases/download/v1.0.0/Longer_loading_music.package",
         "file": "Longer_loading_music.package",
         "size": 32340370,
-        "downloads": 26,
+        "downloads": 27,
         "sha256": "ed2a73e4dd54b7347fc8f8aea3fd4a3455910d70069a23fe2a741f5e366e4267"
       },
       "stars": 0,
@@ -10477,7 +10477,7 @@
         "url": "https://github.com/0KepOnline/SPOREMod_AdventureCastThumbnails/releases/download/v1.2/SPOREMod_AdventureCastThumbnails-v1.2.sporemod",
         "file": "SPOREMod_AdventureCastThumbnails-v1.2.sporemod",
         "size": 19019,
-        "downloads": 22,
+        "downloads": 23,
         "sha256": "121fad3f72e35730ac609e1638927f87fef6d4594ad6e701e57359141af256ac"
       },
       "stars": 0,
@@ -10519,7 +10519,7 @@
         "url": "https://github.com/Gemini-HUN/Bot_parts_global_localization/releases/download/2.4.0/Bot_parts_global_localization.package",
         "file": "Bot_parts_global_localization.package",
         "size": 18474,
-        "downloads": 20,
+        "downloads": 21,
         "sha256": "484a1ddb76e1937b1afc55dc960818658d9bc98e49e54293eca1aa6822721ea9"
       },
       "stars": 3,
@@ -10551,37 +10551,11 @@
         "url": "https://github.com/Chronomaza/STFU-space-alerts/releases/download/v1.0.0/STFU_space_alerts.package",
         "file": "STFU_space_alerts.package",
         "size": 690984,
-        "downloads": 17,
+        "downloads": 18,
         "sha256": "824e901800b829159ffac8ed0a71af64f44a96769e6a52ee2bc503acfa3e1efb"
       },
       "stars": 0,
       "updated": "2026-10-09T17:54:45Z",
-      "needs": {
-        "stores": [],
-        "galactic_adventures": true,
-        "launcher_kit": true
-      }
-    },
-    {
-      "id": "codestlover/Spore-CivChallenge",
-      "name": "Spore CivChallenge",
-      "author": "codestlover",
-      "description": "Spore mod — a harder Civilization stage: no land raids, 3 turrets per city, 4 spice sources, no superweapons, no compliments, 3 gifts per empire",
-      "kind": "release",
-      "category": "gameplay",
-      "status": "maintained",
-      "page": "https://github.com/codestlover/Spore-CivChallenge",
-      "release": {
-        "tag": "v1.1.1",
-        "published": "2026-10-27T16:30:57Z",
-        "url": "https://github.com/codestlover/Spore-CivChallenge/releases/download/v1.1.1/CivChallenge.sporemod",
-        "file": "CivChallenge.sporemod",
-        "size": 272703,
-        "downloads": 15,
-        "sha256": "6c4d7449c4de397610155fab707b988a07e950086cb88323c2a73e393dfbf8c2"
-      },
-      "stars": 0,
-      "updated": "2026-10-27T17:55:05Z",
       "needs": {
         "stores": [],
         "galactic_adventures": true,
@@ -10603,11 +10577,37 @@
         "url": "https://github.com/codestlover/Spore-CivDrive/releases/download/v1.0.13/CivDrive.sporemod",
         "file": "CivDrive.sporemod",
         "size": 280102,
-        "downloads": 15,
+        "downloads": 17,
         "sha256": "a3d82948f862ce155bda80603d60d180ec680a10f2bc967aec08d4064a607f31"
       },
       "stars": 0,
       "updated": "2026-10-28T02:31:28Z",
+      "needs": {
+        "stores": [],
+        "galactic_adventures": true,
+        "launcher_kit": true
+      }
+    },
+    {
+      "id": "codestlover/Spore-CivChallenge",
+      "name": "Spore CivChallenge",
+      "author": "codestlover",
+      "description": "Spore mod — a harder Civilization stage: no land raids, 3 turrets per city, 4 spice sources, no superweapons, no compliments, 3 gifts per empire",
+      "kind": "release",
+      "category": "gameplay",
+      "status": "maintained",
+      "page": "https://github.com/codestlover/Spore-CivChallenge",
+      "release": {
+        "tag": "v1.1.1",
+        "published": "2026-10-27T16:30:57Z",
+        "url": "https://github.com/codestlover/Spore-CivChallenge/releases/download/v1.1.1/CivChallenge.sporemod",
+        "file": "CivChallenge.sporemod",
+        "size": 272703,
+        "downloads": 16,
+        "sha256": "6c4d7449c4de397610155fab707b988a07e950086cb88323c2a73e393dfbf8c2"
+      },
+      "stars": 0,
+      "updated": "2026-10-27T17:55:05Z",
       "needs": {
         "stores": [],
         "galactic_adventures": true,
